@@ -1,0 +1,29 @@
+﻿<Window x:Class="KinectStreams.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Kinect | Color, Depth, Infrared" Height="1220.8" Width="1920" Loaded="Window_Loaded" Closed="Window_Closed">
+    <Grid>
+        <Image Name="camera" />
+        <Canvas Name="canvas" Margin="-10,152,9.6,10.2" >
+           
+        </Canvas> 
+        <TextBlock x:Name="GestureVisual"
+        		Text="Detecting Gesture"
+        		FontSize="30"
+        		Foreground="Black"
+        		Background="Yellow"
+        		HorizontalAlignment="Right"
+        		VerticalAlignment="Top"
+        		Opacity="0.0" Canvas.Left="1334" Canvas.Top="-144" Height="133" Width="552"/>
+        <Grid Style="{StaticResource GridButtonsStyle}">
+            <StackPanel Style="{StaticResource StackPanelButtonsStyle}" Margin="716,0,482,5" Width="714">
+                <Button Content="Color" Style="{StaticResource ButtonStyle}" Click="Color_Click" />
+                <Button Content="Depth" Style="{StaticResource ButtonStyle}" Click="Depth_Click" />
+                <Button Content="Infrared" Style="{StaticResource ButtonStyle}" Click="Infrared_Click" />
+                <Button Content="Body" Style="{StaticResource ButtonStyle}" Click="Body_Click" />
+                <Button Content="Coord" Style="{StaticResource ButtonStyle}" Click="Coord_Click" />
+                <Button Content="Degree" Style="{StaticResource ButtonStyle}" Click="Degree_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
