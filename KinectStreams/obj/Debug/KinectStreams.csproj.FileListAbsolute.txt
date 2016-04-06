@@ -83,6 +83,7 @@ C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\o
 C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\obj\Debug\KinectStreams.exe
 C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\obj\Debug\KinectStreams.pdb
 C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\obj\Debug\KinectStreams.csprojResolveAssemblyReference.cache
-C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\bin\Debug\_gesture.gbd
 C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\obj\Debug\KinectStreams_Content.g.cs
-C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\bin\Debug\Database\HandsAboveHead.gbd
+C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\bin\Debug\Database\gesture_sidelift.gbd
+C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\bin\Debug\Database\gesture_squat.gbd
+C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\bin\Debug\Database\gestureForTest.gbd

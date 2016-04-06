@@ -90,7 +90,7 @@ namespace KinectStreams
             }
 
 
-            /////////added//////////////
+            ///adding event
             // Initialize the gesture detection objects for our gestures
             this.gestureDetectorList = new List<GestureDetector>();
 
@@ -198,7 +198,7 @@ namespace KinectStreams
         void GestureResult_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             GestureResultView result = sender as GestureResultView;
             if ( result.Confidence > 0.8 ) {
-                //MessageBox.Show("detected");
+                System.Windows.MessageBox.Show("detected");
              
                // Screenshot();
             }        

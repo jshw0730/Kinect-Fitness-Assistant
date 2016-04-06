@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Kinect | Color, Depth, Infrared" Height="1220.8" Width="1920" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
-        <Image Name="camera" />
+        <Image Name="camera" Margin="0,195,-0.4,0.2" />
         <Canvas Name="canvas" Margin="-10,152,9.6,10.2" >
            
         </Canvas> 

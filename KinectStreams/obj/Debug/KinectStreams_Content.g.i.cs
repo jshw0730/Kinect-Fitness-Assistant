@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/handsabovehead.gbd")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("_gesture.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_sidelift.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_squat.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesturefortest.gbd")]
 
 
