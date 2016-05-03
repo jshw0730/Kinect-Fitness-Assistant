@@ -91,6 +91,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="angleCalc.cs" />
+    <Compile Include="MotionCheck.cs" />
     <Compile Include="GestureDetector.cs" />
     <Compile Include="GestureResultView.cs" />
     <Compile Include="KinectJointFilter.cs" />
@@ -121,10 +122,10 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <Content Include="Database\gesture_sidelift.gbd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Database\gesture_squat.gbd">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Database\gestureForTest.gbd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

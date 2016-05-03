@@ -87,3 +87,25 @@ C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\o
 C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\bin\Debug\Database\gesture_sidelift.gbd
 C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\bin\Debug\Database\gesture_squat.gbd
 C:\Users\MrJ\Documents\Visual Studio 2015\Projects\KinectStreams\KinectStreams\bin\Debug\Database\gestureForTest.gbd
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\KinectStreams.exe.config
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.exe
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.pdb
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\Database\gesture_sidelift.gbd
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\Database\gesture_squat.gbd
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\Database\gestureForTest.gbd
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\KinectStreams.exe
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\KinectStreams.pdb
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\Microsoft.Kinect.dll
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.dll
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\Microsoft.Kinect.xml
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.xml
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.csprojResolveAssemblyReference.cache
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\MainWindow.baml
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\App.baml
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\MainWindow.g.cs
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\App.g.cs
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams_Content.g.cs
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams_MarkupCompile.cache
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.g.resources
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.Properties.Resources.resources
+C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.csproj.GenerateResource.Cache

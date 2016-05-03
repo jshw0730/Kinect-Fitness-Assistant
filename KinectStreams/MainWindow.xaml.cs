@@ -28,6 +28,17 @@ using global::Windows.Graphics.Imaging;
 namespace KinectStreams
 {
 
+    static class DisplayTypes {
+
+        public const int showDefault = 0;
+        public const int showUpperSide = 1;
+        public const int showDownerSide = 2;
+    }
+
+  
+  
+
+
     public partial class MainWindow : Window 
         {
 
@@ -65,9 +76,17 @@ namespace KinectStreams
 
         bool _displayBody = true;//false;
         bool _displayCoord = false;
-        bool _displayDegree = true;
 
-        #endregion
+        int countGes = 0; //checking count
+        int timeStamp = 180; //time limit for one Gesture (for count)
+        int savingBeforeGesture = 0;
+
+        MotionCheck motionChecker = new MotionCheck();
+
+
+        public static int _displayDegree =  DisplayTypes.showDefault;
+            
+            #endregion
 
         #region Constructor
 
@@ -97,7 +116,7 @@ namespace KinectStreams
             // Create a gesture detector for each body (6 bodies => 6 detectors)
             int maxBodies = _sensor.BodyFrameSource.BodyCount;
             for ( int i = 0; i < maxBodies; ++i ) {
-                GestureResultView result = new GestureResultView(i, false, false, 0.0f);
+                GestureResultView result = new GestureResultView(i, false, false, 0.0f,0, null);
                 GestureDetector detector = new GestureDetector(this._sensor  , result);
                 result.PropertyChanged += GestureResult_PropertyChanged;
                 this.gestureDetectorList.Add(detector);
@@ -117,6 +136,15 @@ namespace KinectStreams
 
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e) {
             var reference = e.FrameReference.AcquireFrame();
+
+
+
+            //text display part
+            --timeStamp;
+            this.Timestamp.Text = timeStamp.ToString();
+            if ( timeStamp <= 0 ) { countGes = 0; _displayDegree = DisplayTypes.showDefault; }
+            this.count.Text = "count : " + countGes.ToString();
+
 
             // Color
             using (var frame = reference.ColorFrameReference.AcquireFrame()) {
@@ -162,7 +190,7 @@ namespace KinectStreams
 
                                     _filter.UpdateFilter(body);
                                     _filteredJoints = _filter.GetFilteredJoints();
-                                    canvas.DrawSkeleton(_filteredJoints);//, body);
+                                    //canvas.DrawSkeleton(_filteredJoints);//, body);
                                     
                                     //canvas.DrawSkeleton(body);
                                     //Gesture.WaveHand(this.canvas, body);
@@ -170,13 +198,52 @@ namespace KinectStreams
                                     /**********************************/
                                     if (_displayCoord) {
                                         canvas.DrawSkeletonCoord(_filteredJoints);
-                                   //     Gesture.WaveHand(this.canvas, body);
                                     }
 
-                                    if (_displayDegree) {
-                                        canvas.DrawDegreeOnBody(_filteredJoints);
+                                    /*
+                                    canvas.DrawIsStraightNeck(_filteredJoints);
+                                    canvas.DrawShoulderDegree(_filteredJoints);
+                                    canvas.DrawDegreeUpperBody(_filteredJoints);
+                                    canvas.DrawIsStraightHand(_filteredJoints);
+
+                                    canvas.DrawIsStraightSpine(_filteredJoints);
+
+                                    canvas.DrawDegreeDownerBody(_filteredJoints);
+                                    canvas.DrawIsStraightAnkle(_filteredJoints);
+                                    canvas.DrawLeg2LegWidth(_filteredJoints);
+                                    */
+                                    //have been changed
+                                    switch ( _displayDegree ) {
+
+                                        case DisplayTypes.showDefault: { //0
+                                                canvas.DrawIsStraightSpine(_filteredJoints);
+                                                break;
+                                            }
+
+                                        case DisplayTypes.showUpperSide: {//1
+                                                canvas.DrawIsStraightNeck(_filteredJoints);
+                                                canvas.DrawShoulderDegree(_filteredJoints);
+                                                canvas.DrawDegreeUpperBody(_filteredJoints);
+                                                canvas.DrawIsStraightHand(_filteredJoints);
+                                                break;
+                                            }
+
+                                        case DisplayTypes.showDownerSide: {//2
+                                                //if (jointA.TrackingState == TrackingState.NotTracked || 
+                                                //    jointB.TrackingState == TrackingState.NotTracked || 
+                                                //    jointC.TrackingState == TrackingState.NotTracked) return;
+                                                                          
+                                                canvas.DrawDegreeDownerBody(_filteredJoints);
+                                                canvas.DrawIsStraightAnkle(_filteredJoints);
+                                                canvas.DrawLeg2LegWidth(_filteredJoints);
+                                                break;
+                                            }
+                                        default: {
+                                                System.Windows.MessageBox.Show("something's going wrong");
+                                                break;
+                                            }
+
                                     }
-                                    /**********************************/
                                     
                                 }
                             }
@@ -197,11 +264,39 @@ namespace KinectStreams
         //////////added for gesture
         void GestureResult_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             GestureResultView result = sender as GestureResultView;
-            if ( result.Confidence > 0.8 ) {
-                System.Windows.MessageBox.Show("detected");
-             
-               // Screenshot();
-            }        
+
+            this.GestureNotifier.Text = result.GestureKind;
+
+            //sidelift counting algorithm
+            if ( result.GestureKind == "sideliftB" ) {
+                motionChecker.checkSidelift[1] = true;
+                _displayDegree = result.GestureNumber;
+
+                //counting part
+                if ( motionChecker.checkSidelift[1] && motionChecker.checkSidelift[2] ) {
+                    motionChecker.checkSidelift[0] = false; motionChecker.checkSidelift[1] = false; motionChecker.checkSidelift[2] = false; //initializing check-ers
+                    motionChecker.checkMotionEnd = true;
+                    timeStamp = 180;
+                }//both are true, its end of one motion
+
+                else if ( motionChecker.checkSidelift[1] && !motionChecker.checkSidelift[2] ) { motionChecker.checkSidelift[1] = true; } // it's starting of one motion 
+            }
+
+            if ( result.GestureKind == "sidelift" ) { motionChecker.checkSidelift[2] = true;
+                _displayDegree = result.GestureNumber;
+            }
+            if ( result.GestureKind == "sideliftA" ) { motionChecker.checkSidelift[0] = true;
+                _displayDegree = result.GestureNumber;
+            }
+            
+
+            if ( motionChecker.checkMotionEnd ) {// &&_displayDegree == savingBeforeGesture   ) { 
+                ++countGes;
+                motionChecker.checkMotionEnd = false;
+            } //if time is not over, then go up for count
+
+            savingBeforeGesture = _displayDegree; //backing up beforeGesture
+
         }
 
 
@@ -225,7 +320,7 @@ namespace KinectStreams
 
         #region addedevent
         private void Coord_Click(object sender, RoutedEventArgs e) {
-
+            /*
             if (_displayBody == true) {
                 if (_displayDegree == true) {
                     _displayDegree = !_displayDegree;
@@ -233,10 +328,13 @@ namespace KinectStreams
                 }
                 else { _displayCoord = !_displayCoord; }
             }
+            */
+
+            //_displayDegree = DisplayTypes.showDownerSide;
         }
 
         private void Degree_Click(object sender, RoutedEventArgs e) {
-
+            /*
             if (_displayBody == true) {
                 if (_displayCoord == true) {
                     _displayCoord = !_displayCoord;
@@ -244,7 +342,8 @@ namespace KinectStreams
                 }
                 else { _displayDegree = !_displayDegree; }
             }
-
+            */
+            //_displayDegree = DisplayTypes.showUpperSide;
 
         }
         #endregion addedevent
@@ -255,7 +354,7 @@ namespace KinectStreams
 
 
 
-            /*
+            /*screenshot
         async private void Screenshot() {
             // Thread protetction on FileIO actions
             if ( !isTakingScreenshot ) {

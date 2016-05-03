@@ -26,21 +26,25 @@ namespace KinectStreams {
         //private readonly string gestureDatabase = @"Database\SampleDatabase.gbd";
 
 
+            
         private readonly string gestureDatabase_forTest = @"Database\gestureForTest.gbd";
         private readonly string gestureForTest = "gestureForTest";
 
 
+
+        
+       
+
         private readonly string gestureDatabase_squat = @"Database\gesture_squat.gbd";
-        private readonly string gestureDatabase_sidelift = @"Database\gesture_sidelift.gbd";
-
-        //private readonly string handsAboveHeadGestureName = "SteerProgress";
-        //private readonly string seatedGestureName = "SteerStraight";
-
         private readonly string squatGestureName = "gesture_squat";
         private readonly string squatProgGestureName = "gesture_squatProgress";
 
-        private readonly string sideliftGestureName = "gesture_sidelift";
-        private readonly string sideliftProgGestureName = "gesture_sideliftProgress";
+
+        private readonly string gestureDatabase_sidelift = @"Database\gesture_sidelift.gbd";
+            private readonly string sideliftGestureName = "gesture_sidelift";
+            private readonly string sideliftGestureName_A = "gesture_sideliftA";
+            private readonly string sideliftGestureName_B = "gesture_sideliftB";
+            private readonly string sideliftProgGestureName = "gesture_sideliftProgress";
 
         /// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
         private VisualGestureBuilderFrameSource vgbFrameSource = null;
@@ -77,16 +81,23 @@ namespace KinectStreams {
 
             // load the gesture from the gesture database
 
-            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(gestureDatabase_sidelift) ) {
+            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_sidelift) ) {
 
                 foreach ( Gesture gesture in database.AvailableGestures ) {
                     if ( gesture.Name.Equals(this.sideliftGestureName) ) {
                         this.vgbFrameSource.AddGesture(gesture);
+                        
+                    }
+                    if ( gesture.Name.Equals(this.sideliftGestureName_A) ) {
+                        this.vgbFrameSource.AddGesture(gesture);
+
+                    }
+                    if ( gesture.Name.Equals(this.sideliftGestureName_B) ) {
+                        this.vgbFrameSource.AddGesture(gesture);
+
                     }
 
-                    if ( gesture.Name.Equals(this.sideliftProgGestureName) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-                    }
+
                 }
             }
 
@@ -96,12 +107,13 @@ namespace KinectStreams {
                 foreach ( Gesture gesture in database.AvailableGestures ) {
                     if ( gesture.Name.Equals(this.gestureForTest) ) {
                         this.vgbFrameSource.AddGesture(gesture);
+
                     }
                 }
             }
 
 
-            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(gestureDatabase_squat) ) {
+            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_squat) ) {
 
                 foreach ( Gesture gesture in database.AvailableGestures ) {
                     if ( gesture.Name.Equals(this.squatGestureName) ) {
@@ -210,26 +222,48 @@ namespace KinectStreams {
                     if ( discreteResults != null ) {
                         foreach ( Gesture gesture in this.vgbFrameSource.Gestures ) {
                             
-                            /*oh yes this is for test*/
                             if ( gesture.GestureType == GestureType.Discrete ) {
-                                if ( gesture.Name.Equals(this.gestureForTest) ) {
-                                    DiscreteGestureResult result = null;
-                                    discreteResults.TryGetValue(gesture, out result);
 
-                                    // update the GestureResultView object with new gesture result values
-                                    if ( result != null ) {
-                                        this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence); }
-                                }
                                 
                                 //sidelift
                                 if ( gesture.Name.Equals(this.sideliftGestureName) ) {
                                     DiscreteGestureResult result = null;
                                     discreteResults.TryGetValue(gesture, out result);
 
-                                    //System.Windows.MessageBox.Show("sidelift gesture detected");
                                     if ( result != null ) {
-                                        this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence); }
+                                        if ( result.Confidence > 0.2 )
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sidelift"); }
                                 }
+
+                                if ( gesture.Name.Equals(this.sideliftGestureName_A) ) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if ( result != null ) {
+                                        if(result.Confidence > 0.2)
+                                        this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sideliftA");
+                                    }
+                                }
+
+                                if ( gesture.Name.Equals(this.sideliftGestureName_B) ) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if ( result != null ) {
+                                        if ( result.Confidence > 0.1 )
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sideliftB");
+                                    }
+                                }
+                                
+                                //oh yes this is for test
+                                if ( gesture.Name.Equals(this.gestureForTest) ) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    // update the GestureResultView object with new gesture result values
+                                    if ( result != null ) {
+                                        if ( result.Confidence > 0.2 )
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sidelift"); }
+                                }
+                                
                             }
                         }
                     }
@@ -238,8 +272,9 @@ namespace KinectStreams {
                     if( continuousResults != null ) {
 
                         foreach ( Gesture gesture in this.vgbFrameSource.Gestures ) {
-
+                            
                             //sidelift
+                            /*
                             if ( gesture.Name.Equals(this.sideliftProgGestureName) && gesture.GestureType == GestureType.Continuous ) {
                                 ContinuousGestureResult result = null;
                                 continuousResults.TryGetValue(gesture, out result);
@@ -248,7 +283,6 @@ namespace KinectStreams {
                                 if ( result != null ) {
                                     var progress = result.Progress;
                                     if(progress > 0.5 && progress < 1 ) {
-/*for debug*/                          // System.Windows.MessageBox.Show("progress detected");
                                         this.GestureResultView.UpdateGestureResult(true, true, result.Progress);
                                     }
                                     else {
@@ -256,7 +290,7 @@ namespace KinectStreams {
                                     }
                                     //this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence);
                                 }
-                            }
+                            }*/
                         }
                     }
 
@@ -271,7 +305,7 @@ namespace KinectStreams {
         /// <param name="e">event arguments</param>
         private void Source_TrackingIdLost(object sender, TrackingIdLostEventArgs e) {
             // update the GestureResultView object to show the 'Not Tracked' image in the UI
-            this.GestureResultView.UpdateGestureResult(false, false, 0.0f);
+            this.GestureResultView.UpdateGestureResult(false, false, 0.0f,0,null);
         }
     }
 }

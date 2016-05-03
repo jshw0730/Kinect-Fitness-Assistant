@@ -25,6 +25,12 @@ namespace KinectStreams
     /// </summary>
     public sealed class GestureResultView : INotifyPropertyChanged
     {
+
+
+
+
+        string gestureKind= null;
+
         /// <summary> The body index (0-5) associated with the current gesture detector </summary>
         private int bodyIndex = 0;
 
@@ -37,6 +43,8 @@ namespace KinectStreams
         /// <summary> True, if the body is currently being tracked </summary>
         private bool isTracked = false;
 
+        private int gestureNumber = 0;
+
         /// <summary>
         /// Initializes a new instance of the GestureResultView class and sets initial property values
         /// </summary>
@@ -44,12 +52,14 @@ namespace KinectStreams
         /// <param name="isTracked">True, if the body is currently tracked</param>
         /// <param name="detected">True, if the gesture is currently detected for the associated body</param>
         /// <param name="confidence">Confidence value for detection of the 'Seated' gesture</param>
-        public GestureResultView(int bodyIndex, bool isTracked, bool detected, float confidence)
+        public GestureResultView(int bodyIndex, bool isTracked, bool detected, float confidence, int gestureNumber, string gestureKind)
         {
             this.BodyIndex = bodyIndex;
             this.IsTracked = isTracked;
             this.Detected = detected;
             this.Confidence = confidence;
+            this.GestureNumber = gestureNumber;
+            this.GestureKind = gestureKind;
         }
 
         /// <summary>
@@ -137,13 +147,41 @@ namespace KinectStreams
             }
         }
 
+        public int GestureNumber {
+            get {
+                return this.gestureNumber;
+            }
+
+            private set {
+                if ( this.gestureNumber != value ) {
+                    this.gestureNumber = value;
+                    this.NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string GestureKind {
+            get {
+                return this.gestureKind;
+            }
+
+            private set {
+              if ( this.gestureKind != value ) {
+                    this.gestureKind = value;
+                    this.NotifyPropertyChanged();
+                }
+            }
+        }
+
+
+
         /// <summary>
         /// Updates the values associated with the discrete gesture detection result
         /// </summary>
         /// <param name="isBodyTrackingIdValid">True, if the body associated with the GestureResultView object is still being tracked</param>
         /// <param name="isGestureDetected">True, if the discrete gesture is currently detected for the associated body</param>
         /// <param name="detectionConfidence">Confidence value for detection of the discrete gesture</param>
-        public void UpdateGestureResult(bool isBodyTrackingIdValid, bool isGestureDetected, float detectionConfidence)
+        public void UpdateGestureResult(bool isBodyTrackingIdValid, bool isGestureDetected, float detectionConfidence, int gNumber, string gKind)
         {
             this.IsTracked = isBodyTrackingIdValid;
             this.Confidence = 0.0f;
@@ -159,11 +197,14 @@ namespace KinectStreams
                 if (this.Detected)
                 {
                     this.Confidence = detectionConfidence;
+                    this.GestureNumber = gNumber;
                 }
                 else
                 {
 
                 }
+                this.GestureKind = gKind;
+
             }
         }
 
