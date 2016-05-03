@@ -109,3 +109,6 @@ C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\
 C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.g.resources
 C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.Properties.Resources.resources
 C:\Users\CCD\Desktop\성훈\KinectStreams\KinectStreams\KinectStreams\obj\Debug\KinectStreams.csproj.GenerateResource.Cache
+C:\Users\CCD\Desktop\성훈\새 폴더\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.exe.config
+C:\Users\CCD\Desktop\성훈\새 폴더\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.exe
+C:\Users\CCD\Desktop\성훈\새 폴더\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.pdb
