@@ -16,6 +16,7 @@ namespace KinectStreams
 
         // RGB camera 
         public static ImageSource ToBitmap(this ColorFrame frame) {
+            int i;
             int width = frame.FrameDescription.Width;
             int height = frame.FrameDescription.Height;
             PixelFormat format = PixelFormats.Bgr32;
