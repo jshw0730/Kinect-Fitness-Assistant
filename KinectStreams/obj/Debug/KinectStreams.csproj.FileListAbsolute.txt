@@ -115,3 +115,6 @@ C:\Users\CCD\Desktop\성훈\새 폴더\Kinect-Fitness-Assistant\KinectStreams\ob
 C:\Users\SH520\Desktop\새 폴더\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.exe.config
 C:\Users\SH520\Desktop\새 폴더\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.exe
 C:\Users\SH520\Desktop\새 폴더\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.pdb
+C:\Users\CCD\Desktop\새 폴더 (2)\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.exe.config
+C:\Users\CCD\Desktop\새 폴더 (2)\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.exe
+C:\Users\CCD\Desktop\새 폴더 (2)\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.pdb
