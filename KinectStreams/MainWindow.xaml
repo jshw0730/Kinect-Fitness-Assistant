@@ -18,12 +18,21 @@
         		Opacity="0.0" Height="50" Width="59" Canvas.Left="83" Canvas.Top="-33" Margin="250,0,0,0"/>
         <TextBlock x:Name="count"
         		Text="count : 0"
-        		FontSize="30"
+        		FontSize="120"
         		Foreground="Black"
         		Background="Yellow"
         		HorizontalAlignment="Left"
         		VerticalAlignment="Top"
-        		Opacity="1.0" Canvas.Left="1334" Canvas.Top="-144" Height="50" Width="172"/>
+        		Opacity="1.0" Canvas.Left="1334" Canvas.Top="-144" Height="272" Width="524" RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.131"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.RenderTransform>
+        </TextBlock>
         <Grid Style="{StaticResource GridButtonsStyle}">
             <StackPanel Style="{StaticResource StackPanelButtonsStyle}" Margin="134,0,121.6,5" Width="738">
                 <Button Content="Color" Style="{StaticResource ButtonStyle}" Click="Color_Click" />
@@ -41,7 +50,7 @@
         	Background="Yellow"
         	HorizontalAlignment="Left"
         	VerticalAlignment="Top"
-        	Opacity="0.0" Height="50" Width="322" Margin="339,0,0,0"/>
+        	Opacity="1.0" Height="50" Width="322" Margin="0,282,0,0"/>
         <TextBlock x:Name="motionA"
         	Text="0"
         	FontSize="30"
@@ -49,7 +58,7 @@
         	Background="Yellow"
         	HorizontalAlignment="Left"
         	VerticalAlignment="Top"
-        	Opacity="0.0" Height="50" Width="52" Margin="740,0,0,0"/>
+        	Opacity="1.0" Height="50" Width="52" Margin="740,0,0,0"/>
         <TextBlock x:Name="motionB"
         	Text="0"
         	FontSize="30"
@@ -57,7 +66,7 @@
         	Background="Yellow"
         	HorizontalAlignment="Left"
         	VerticalAlignment="Top"
-        	Opacity="0.0" Height="50" Width="52" Margin="818,0,0,0"/>
+        	Opacity="1.0" Height="50" Width="52" Margin="818,0,0,0"/>
         <TextBlock x:Name="motionF"
         	Text="0"
         	FontSize="30"
@@ -65,6 +74,6 @@
         	Background="Yellow"
         	HorizontalAlignment="Left"
         	VerticalAlignment="Top"
-        	Opacity="0.0" Height="50" Width="52" Margin="902,0,0,0"/>
+        	Opacity="1.0" Height="50" Width="52" Margin="902,0,0,0"/>
     </Grid>
 </Window>

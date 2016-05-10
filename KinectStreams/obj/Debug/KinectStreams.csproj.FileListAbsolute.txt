@@ -118,3 +118,24 @@ C:\Users\SH520\Desktop\새 폴더\Kinect-Fitness-Assistant\KinectStreams\obj\Deb
 C:\Users\CCD\Desktop\새 폴더 (2)\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.exe.config
 C:\Users\CCD\Desktop\새 폴더 (2)\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.exe
 C:\Users\CCD\Desktop\새 폴더 (2)\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.pdb
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.exe.config
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.exe
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.pdb
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_sidelift.gbd
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_squat.gbd
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gestureForTest.gbd
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_shoulderpress.gbd
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.exe
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.pdb
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.dll
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.xml
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.csprojResolveAssemblyReference.cache
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\MainWindow.baml
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\App.baml
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\MainWindow.g.cs
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\App.g.cs
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams_Content.g.cs
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams_MarkupCompile.cache
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.g.resources
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.Properties.Resources.resources
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.csproj.GenerateResource.Cache

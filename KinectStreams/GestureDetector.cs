@@ -26,25 +26,32 @@ namespace KinectStreams {
         //private readonly string gestureDatabase = @"Database\SampleDatabase.gbd";
 
 
-            
+        //test gesture
         private readonly string gestureDatabase_forTest = @"Database\gestureForTest.gbd";
         private readonly string gestureForTest = "gestureForTest";
-
-
-
         
-       
+        
 
-        private readonly string gestureDatabase_squat = @"Database\gesture_squat.gbd";
-        private readonly string squatGestureName = "gesture_squat";
-        private readonly string squatProgGestureName = "gesture_squatProgress";
-
-
+        //gesture - sidelift
         private readonly string gestureDatabase_sidelift = @"Database\gesture_sidelift.gbd";
             private readonly string sideliftGestureName = "gesture_sidelift";
             private readonly string sideliftGestureName_A = "gesture_sideliftA";
             private readonly string sideliftGestureName_B = "gesture_sideliftB";
-            private readonly string sideliftProgGestureName = "gesture_sideliftProgress";
+        //    private readonly string sideliftProgGestureName = "gesture_sideliftProgress";
+
+
+        //gesture - squat
+        private readonly string gestureDatabase_squat = @"Database\gesture_squat.gbd";
+            private readonly string squatGestureName = "Squat";
+            private readonly string squatGestureName_A = "squatA";
+            private readonly string squatGestureName_B = "SquatB";
+
+        //gesture - shoulderpress
+        private readonly string gestureDatabase_shoulderpress = @"Database\gesture_shoulderpress.gbd";
+            private readonly string shoulderpressGestureName = "gesture_shoulderpress";
+            private readonly string shoulderpressGestureName_A = "gesture_shoulderpressA";
+            private readonly string shoulderpressGestureName_B = "gesture_shoulderpressB";
+
 
         /// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
         private VisualGestureBuilderFrameSource vgbFrameSource = null;
@@ -81,50 +88,42 @@ namespace KinectStreams {
 
             // load the gesture from the gesture database
 
-            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_sidelift) ) {
-
-                foreach ( Gesture gesture in database.AvailableGestures ) {
-                    if ( gesture.Name.Equals(this.sideliftGestureName) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-                        
-                    }
-                    if ( gesture.Name.Equals(this.sideliftGestureName_A) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-
-                    }
-                    if ( gesture.Name.Equals(this.sideliftGestureName_B) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-
-                    }
-
-
-                }
-            }
-
             /**yes this for test**/
             using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_forTest) ) {
-
                 foreach ( Gesture gesture in database.AvailableGestures ) {
-                    if ( gesture.Name.Equals(this.gestureForTest) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-
-                    }
+                    if ( gesture.Name.Equals(this.gestureForTest) ) {  this.vgbFrameSource.AddGesture(gesture);  }
                 }
             }
 
+            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_sidelift) ) {
+                foreach ( Gesture gesture in database.AvailableGestures ) {
+                    if ( gesture.Name.Equals(this.sideliftGestureName) )   { this.vgbFrameSource.AddGesture(gesture); }
+                    if ( gesture.Name.Equals(this.sideliftGestureName_A) ) { this.vgbFrameSource.AddGesture(gesture); }
+                    if ( gesture.Name.Equals(this.sideliftGestureName_B) ) { this.vgbFrameSource.AddGesture(gesture); }
+                }
+            }
 
             using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_squat) ) {
-
                 foreach ( Gesture gesture in database.AvailableGestures ) {
-                    if ( gesture.Name.Equals(this.squatGestureName) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-                    }
-
-                    if ( gesture.Name.Equals(this.squatProgGestureName) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-                    }
+                    if ( gesture.Name.Equals(this.squatGestureName) )   { this.vgbFrameSource.AddGesture(gesture); }
+                    if ( gesture.Name.Equals(this.squatGestureName_A) ) { this.vgbFrameSource.AddGesture(gesture); }
+                    if ( gesture.Name.Equals(this.squatGestureName_B) ) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
+
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_shoulderpress)) {
+                foreach (Gesture gesture in database.AvailableGestures) {
+                    if (gesture.Name.Equals(this.shoulderpressGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.shoulderpressGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.shoulderpressGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                }
+            }
+
+
+
+
+
+
         }
 
 
@@ -224,15 +223,16 @@ namespace KinectStreams {
                             
                             if ( gesture.GestureType == GestureType.Discrete ) {
 
-                                
-                                //sidelift
+
+                                #region sidelift
                                 if ( gesture.Name.Equals(this.sideliftGestureName) ) {
                                     DiscreteGestureResult result = null;
                                     discreteResults.TryGetValue(gesture, out result);
 
                                     if ( result != null ) {
                                         if ( result.Confidence > 0.2 )
-                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sidelift"); }
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 3, "sidelift"); 
+                                    }
                                 }
 
                                 if ( gesture.Name.Equals(this.sideliftGestureName_A) ) {
@@ -241,7 +241,7 @@ namespace KinectStreams {
 
                                     if ( result != null ) {
                                         if(result.Confidence > 0.2)
-                                        this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sideliftA");
+                                        this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 1, "sidelift");
                                     }
                                 }
 
@@ -250,10 +250,74 @@ namespace KinectStreams {
                                     discreteResults.TryGetValue(gesture, out result);
                                     if ( result != null ) {
                                         if ( result.Confidence > 0.1 )
-                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sideliftB");
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 2, "sidelift");
                                     }
                                 }
+                                #endregion sidelift
+
+                                #region squat
+                                if (gesture.Name.Equals(this.squatGestureName)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > 0.2)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 3, "squat");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.squatGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > 0.2)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 1, "squat");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.squatGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > 0.1)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 2, "squat");
+                                    }
+                                }
+                                #endregion squat
                                 
+                                #region shoulderpress
+                                if (gesture.Name.Equals(this.shoulderpressGestureName)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > 0.2)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 3, "shoulderpress");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.shoulderpressGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > 0.2)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 1, "shoulderpress");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.shoulderpressGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > 0.1)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, 2, "shoulderpress");
+                                    }
+                                }
+                                #endregion 
+
+
                                 //oh yes this is for test
                                 if ( gesture.Name.Equals(this.gestureForTest) ) {
                                     DiscreteGestureResult result = null;
@@ -261,7 +325,7 @@ namespace KinectStreams {
                                     // update the GestureResultView object with new gesture result values
                                     if ( result != null ) {
                                         if ( result.Confidence > 0.2 )
-                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sidelift"); }
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "test"); }
                                 }
                                 
                             }
@@ -271,26 +335,8 @@ namespace KinectStreams {
 
                     if( continuousResults != null ) {
 
-                        foreach ( Gesture gesture in this.vgbFrameSource.Gestures ) {
-                            
-                            //sidelift
-                            /*
-                            if ( gesture.Name.Equals(this.sideliftProgGestureName) && gesture.GestureType == GestureType.Continuous ) {
-                                ContinuousGestureResult result = null;
-                                continuousResults.TryGetValue(gesture, out result);
-
-
-                                if ( result != null ) {
-                                    var progress = result.Progress;
-                                    if(progress > 0.5 && progress < 1 ) {
-                                        this.GestureResultView.UpdateGestureResult(true, true, result.Progress);
-                                    }
-                                    else {
-                                        this.GestureResultView.UpdateGestureResult(true, false, result.Progress);
-                                    }
-                                    //this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence);
-                                }
-                            }*/
+                        foreach ( Gesture gesture in this.vgbFrameSource.Gestures ) {                            
+  
                         }
                     }
 

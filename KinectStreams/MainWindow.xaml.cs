@@ -33,35 +33,19 @@ namespace KinectStreams
         public const int showDefault = 0;
         public const int showUpperSide = 1;
         public const int showDownerSide = 2;
+        public const int showAllSide = 3;
     }
-
-  
-  
-
 
     public partial class MainWindow : Window 
         {
 
         #region gesture_fields
-        /// <summary>
-        /// Interaction logic for MainWindow.xaml
-        /// </summary>
-        //Face Orientation Shaping
-        private double prevPitch = 0.0f;
-        private double prevYaw = 0.0f;
-
-        /// <summary> List of gesture detectors, 
-        ///there will be one detector created for each potential body
-        /// (max of 6) </summary>
+  
         private List<GestureDetector> gestureDetectorList = null;
-        public bool isTakingScreenshot = false;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
-
-
-
+        
         #region Members
 
         Mode _mode = Mode.Color;
@@ -148,34 +132,24 @@ namespace KinectStreams
 
             // Color
             using (var frame = reference.ColorFrameReference.AcquireFrame()) {
-                if (frame != null) {
-                    if (_mode == Mode.Color) {
-                        camera.Source = frame.ToBitmap();
-                    }
-                }
+                if (frame != null) {  
+                    if (_mode == Mode.Color) {   camera.Source = frame.ToBitmap();   }   }
             }
-
             // Depth
             using (var frame = reference.DepthFrameReference.AcquireFrame()) {
-                if (frame != null) {
-                    if (_mode == Mode.Depth) {
-                        camera.Source = frame.ToBitmap();
-                    }
-                }
+                if (frame != null) {  
+                    if (_mode == Mode.Depth) {   camera.Source = frame.ToBitmap();   }   }
             }
-
             // Infrared
             using (var frame = reference.InfraredFrameReference.AcquireFrame()) {
-                if (frame != null) {
-                    if (_mode == Mode.Infrared) {
-                        camera.Source = frame.ToBitmap();
-                    }
-                }
+                if (frame != null) {  
+                    if (_mode == Mode.Infrared) {  camera.Source = frame.ToBitmap();  } }
             }
 
             // Body
             using (var frame = reference.BodyFrameReference.AcquireFrame()) {
                 if (frame != null) {
+
                     canvas.Children.Clear();
 
                     _bodies = new Body[frame.BodyFrameSource.BodyCount];
@@ -190,12 +164,16 @@ namespace KinectStreams
 
                                     _filter.UpdateFilter(body);
                                     _filteredJoints = _filter.GetFilteredJoints();
+
+
                                     //canvas.DrawSkeleton(_filteredJoints);//, body);
                                     
                                     //canvas.DrawSkeleton(body);
                                     //Gesture.WaveHand(this.canvas, body);
                                     //Gesture.Swipe(this.canvas, body);
                                     /**********************************/
+
+
                                     if (_displayCoord) {
                                         canvas.DrawSkeletonCoord(_filteredJoints);
                                     }
@@ -212,35 +190,49 @@ namespace KinectStreams
                                     canvas.DrawIsStraightAnkle(_filteredJoints);
                                     canvas.DrawLeg2LegWidth(_filteredJoints);
                                     */
+
+
                                     //have been changed
                                     switch ( _displayDegree ) {
 
-                                        case DisplayTypes.showDefault: { //0
-                                                canvas.DrawIsStraightSpine(_filteredJoints);
-                                                break;
-                                            }
+                                    case DisplayTypes.showDefault: { //0
+                                            canvas.DrawIsStraightSpine(_filteredJoints);
+                                            break;
+                                        }
 
-                                        case DisplayTypes.showUpperSide: {//1
-                                                canvas.DrawIsStraightNeck(_filteredJoints);
-                                                canvas.DrawShoulderDegree(_filteredJoints);
-                                                canvas.DrawDegreeUpperBody(_filteredJoints);
-                                                canvas.DrawIsStraightHand(_filteredJoints);
-                                                break;
-                                            }
+                                    case DisplayTypes.showUpperSide: {//1
+                                            canvas.DrawIsStraightNeck(_filteredJoints);
+                                            canvas.DrawShoulderDegree(_filteredJoints);
+                                            canvas.DrawDegreeUpperBody(_filteredJoints);
+                                            canvas.DrawIsStraightHand(_filteredJoints);
+                                            break;
+                                        }
 
-                                        case DisplayTypes.showDownerSide: {//2
-                                                //if (jointA.TrackingState == TrackingState.NotTracked || 
-                                                //    jointB.TrackingState == TrackingState.NotTracked || 
-                                                //    jointC.TrackingState == TrackingState.NotTracked) return;
+                                    case DisplayTypes.showDownerSide: {//2
+
+                                            //if (jointA.TrackingState == TrackingState.NotTracked || 
+                                            //    jointB.TrackingState == TrackingState.NotTracked || 
+                                            //    jointC.TrackingState == TrackingState.NotTracked) return;
                                                                           
-                                                canvas.DrawDegreeDownerBody(_filteredJoints);
-                                                canvas.DrawIsStraightAnkle(_filteredJoints);
-                                                canvas.DrawLeg2LegWidth(_filteredJoints);
-                                                break;
-                                            }
-                                        default: {
-                                                System.Windows.MessageBox.Show("something's going wrong");
-                                                break;
+                                            canvas.DrawDegreeDownerBody(_filteredJoints);
+                                            canvas.DrawIsStraightAnkle(_filteredJoints);
+                                            canvas.DrawLeg2LegWidth(_filteredJoints);
+                                            break;
+                                        }
+                                    case DisplayTypes.showAllSide: {
+                                            canvas.DrawDegreeDownerBody(_filteredJoints);
+                                            canvas.DrawIsStraightAnkle(_filteredJoints);
+                                            canvas.DrawLeg2LegWidth(_filteredJoints);
+                                            canvas.DrawIsStraightNeck(_filteredJoints);
+                                            canvas.DrawShoulderDegree(_filteredJoints);
+                                            canvas.DrawDegreeUpperBody(_filteredJoints);
+                                            canvas.DrawIsStraightHand(_filteredJoints);
+                                            break;
+
+                                        }
+                                    default: {
+                                            System.Windows.MessageBox.Show("something's going wrong");
+                                            break;
                                             }
 
                                     }
@@ -256,7 +248,6 @@ namespace KinectStreams
             using ( var bodyFrame = reference.BodyFrameReference.AcquireFrame() ) {
                 RegisterGesture(bodyFrame);
             }
-            /////gesture added///////////
 
         }//end_method
 
@@ -264,35 +255,217 @@ namespace KinectStreams
         //////////added for gesture
         void GestureResult_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             GestureResultView result = sender as GestureResultView;
-
+            
+            //part of canvas text
             this.GestureNotifier.Text = result.GestureKind;
 
             //sidelift counting algorithm
+            switch (result.GestureKind) {
+
+
+                #region sidelift
+
+                case "sidelift" :{                    
+                    switch (result.GestureNumber) {
+                        case 1: {
+                                motionChecker.checkSidelift[0] = true;
+                                break;
+                            }
+
+                        case 2: {
+                                motionChecker.checkSidelift[1] = true;
+
+                                //counting part
+                                if (motionChecker.checkSidelift[1]) {
+
+                                    //it's end of one motion
+                                    if (motionChecker.checkSidelift[2]) {               // A-B-C-B 도달
+                                        motionChecker.initializeChecker();              //initializing checkers to false
+
+                                        motionChecker.checkMotionEnd = true;            //운동동작 하나 완성 
+                                        _displayDegree = motionChecker.showInfoSidelift;    //해당 운동에 맞는 정보 표시
+                                        timeStamp = 180;
+                                    }
+
+                                    // it's starting of one motion
+                                    else { 
+                                        motionChecker.checkSidelift[1] = true;
+                                    }
+                                }
+
+                                break;
+                            }
+
+                        case 3: {
+                                motionChecker.checkSidelift[2] = true;
+                                break;
+                            }
+                    }
+                    break;
+                    }
+
+                #region b4 code
+                /*
+                case "sideliftA": {
+                    motionChecker.checkSidelift[0] = true;
+                    //_displayDegree = DisplayTypes.showUpperSide;
+                    break;
+                }
+
+                case "sideliftB": { 
+                    motionChecker.checkSidelift[1] = true;
+
+                    //counting part
+                    if (motionChecker.checkSidelift[1]) { 
+                        
+                        if( motionChecker.checkSidelift[2]) {               // A-B-C-B 도달
+                            motionChecker.initializeChecker();              //initializing checkers to false
+
+                            motionChecker.checkMotionEnd = true;            //운동동작 하나 완성 
+                            _displayDegree = DisplayTypes.showUpperSide;    //해당 운동에 맞는 정보 표시
+                            timeStamp = 180;
+                        }//it's end of one motion
+
+                        else{   //A-B 도달
+                            motionChecker.checkSidelift[1] = true;
+                        }// it's starting of one motion 
+                    }
+                    
+                    break;                    
+                }
+
+                case "sidelift": {
+                    motionChecker.checkSidelift[2] = true;
+                    break;
+                    }
+                 */
+                #endregion
+
+                #endregion sidelift
+
+                #region squat
+
+                case "squat": {
+                        switch (result.GestureNumber) {
+                            case 1: {
+                                motionChecker.checkSquat[0] = true;
+                                break;
+                            }
+
+                            case 2: {
+                                motionChecker.checkSquat[1] = true;
+
+                                //counting part
+                                if (motionChecker.checkSquat[1]) {
+
+                                    //it's end of one motion
+                                    if (motionChecker.checkSquat[2]) {                  // A-B-C-B 도달
+                                        motionChecker.initializeChecker();          //initializing checkers to false
+
+                                        motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
+                                        _displayDegree = motionChecker.showInfoSquat;  //해당 운동에 맞는 정보 표시
+                                        timeStamp = 180;
+                                    }
+
+                                    // it's starting of one motion
+                                    else {
+                                        motionChecker.checkSquat[1] = true;
+                                    }
+                                }
+
+                                 break;
+                            }
+
+                            case 3: {
+                                motionChecker.checkSquat[2] = true;
+                                break;
+                            }
+                    }
+                    break;
+                }
+                #endregion squat
+
+                #region shoulderpress
+
+                case "shoulderpress": {
+                        switch (result.GestureNumber) {
+                            case 1: {
+                                     motionChecker.checkShoulderpress[0] = true;
+                                    break;
+                                }
+
+                            case 2: {
+                                    motionChecker.checkShoulderpress[1] = true;
+
+                                    //counting part
+                                    if (motionChecker.checkShoulderpress[1]) {
+
+                                        //it's end of one motion
+                                        if (motionChecker.checkShoulderpress[2]) {      // A-B-C-B 도달
+                                            motionChecker.initializeChecker();          //initializing checkers to false
+
+                                            motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
+                                            _displayDegree = motionChecker.showInfoShoulderpress;  //해당 운동에 맞는 정보 표시
+                                            timeStamp = 180;
+                                        }
+
+                                        // it's starting of one motion
+                                        else {
+                                            motionChecker.checkShoulderpress[1] = true;
+                                        }
+                                    }
+
+                                    break;
+                                }
+
+                            case 3: {
+                                    motionChecker.checkShoulderpress[2] = true;
+                                    break;
+                                }
+                        }
+                        break;
+                    }
+                #endregion shoulderpress
+
+
+
+            }//end all
+
+
+                    /*
             if ( result.GestureKind == "sideliftB" ) {
                 motionChecker.checkSidelift[1] = true;
                 _displayDegree = result.GestureNumber;
 
                 //counting part
                 if ( motionChecker.checkSidelift[1] && motionChecker.checkSidelift[2] ) {
-                    motionChecker.checkSidelift[0] = false; motionChecker.checkSidelift[1] = false; motionChecker.checkSidelift[2] = false; //initializing check-ers
+                    motionChecker.initializeChecker();    //initializing checkers to false
+
                     motionChecker.checkMotionEnd = true;
                     timeStamp = 180;
+
                 }//both are true, its end of one motion
 
-                else if ( motionChecker.checkSidelift[1] && !motionChecker.checkSidelift[2] ) { motionChecker.checkSidelift[1] = true; } // it's starting of one motion 
+                else if ( motionChecker.checkSidelift[1] && !motionChecker.checkSidelift[2] ) { 
+                    motionChecker.checkSidelift[1] = true; 
+                } // it's starting of one motion 
             }
 
-            if ( result.GestureKind == "sidelift" ) { motionChecker.checkSidelift[2] = true;
+
+            if ( result.GestureKind == "sidelift" ) { 
+                motionChecker.checkSidelift[2] = true;
                 _displayDegree = result.GestureNumber;
             }
-            if ( result.GestureKind == "sideliftA" ) { motionChecker.checkSidelift[0] = true;
+            if ( result.GestureKind == "sideliftA" ) { 
+                motionChecker.checkSidelift[0] = true;
                 _displayDegree = result.GestureNumber;
             }
-            
+            */
 
             if ( motionChecker.checkMotionEnd ) {// &&_displayDegree == savingBeforeGesture   ) { 
                 ++countGes;
                 motionChecker.checkMotionEnd = false;
+                motionChecker.initializeChecker();
             } //if time is not over, then go up for count
 
             savingBeforeGesture = _displayDegree; //backing up beforeGesture
@@ -318,7 +491,6 @@ namespace KinectStreams
         }
 
 
-        #region addedevent
         private void Coord_Click(object sender, RoutedEventArgs e) {
             /*
             if (_displayBody == true) {
@@ -346,55 +518,9 @@ namespace KinectStreams
             //_displayDegree = DisplayTypes.showUpperSide;
 
         }
-        #endregion addedevent
 
         #endregion
 
-
-
-
-
-            /*screenshot
-        async private void Screenshot() {
-            // Thread protetction on FileIO actions
-            if ( !isTakingScreenshot ) {
-                isTakingScreenshot = true;
-                RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap();
-                await renderTargetBitmap.Render(grid)
-                var pixelBuffer = await renderTargetBitmap.GetPixelsAsync();
-
-                var savePicker = new FileSavePicker();
-                savePicker.DefaultFileExtension = ".png";
-                savePicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                savePicker.SuggestedFileName = "snapshot.png";
-
-                // Prompt the user to select a file
-                var saveFile = await savePicker.PickSaveFileAsync();
-
-                // Verify the user selected a file
-                if ( saveFile != null ) {
-                    // Encode the image to the selected file on disk
-                    using ( var fileStream =
-                        await saveFile.OpenAsync(FileAccessMode.ReadWrite) ) {
-                        var encoder =
-                            await BitmapEncoder.CreateAsync(
-                                  BitmapEncoder.PngEncoderId,
-                                  fileStream);
-                        encoder.SetPixelData(
-                            BitmapPixelFormat.Bgra8,
-                            BitmapAlphaMode.Ignore,
-                            (uint)renderTargetBitmap.PixelWidth,
-                            (uint)renderTargetBitmap.PixelHeight,
-                            DisplayInformation.GetForCurrentView().LogicalDpi,
-                            DisplayInformation.GetForCurrentView().LogicalDpi,
-                            pixelBuffer.ToArray());
-                        await encoder.FlushAsync();
-                    }
-                }
-                isTakingScreenshot = false;
-            }
-        }
-            */
 
         private void RegisterGesture(BodyFrame bodyFrame) {
             bool dataReceived = false;
