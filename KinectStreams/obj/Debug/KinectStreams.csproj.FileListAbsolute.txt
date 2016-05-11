@@ -123,7 +123,6 @@ C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.pdb
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_sidelift.gbd
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_squat.gbd
-C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gestureForTest.gbd
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_shoulderpress.gbd
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.exe
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\KinectStreams.pdb
@@ -139,3 +138,8 @@ C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.g.resources
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.Properties.Resources.resources
 C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\obj\Debug\KinectStreams.csproj.GenerateResource.Cache
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_biceps_curl.gbd
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_deadlift.gbd
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_frontlift.gbd
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_lunge.gbd
+C:\Users\SeongHoon\Desktop\git\Kinect-Fitness-Assistant\KinectStreams\bin\Debug\Database\gesture_row.gbd

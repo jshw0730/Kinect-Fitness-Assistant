@@ -10,7 +10,11 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_sidelift.gbd")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_squat.gbd")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesturefortest.gbd")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_shoulderpress.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_biceps_curl.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_deadlift.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_frontlift.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_lunge.gbd")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("database/gesture_row.gbd")]
 
 

@@ -160,7 +160,7 @@ namespace KinectStreams
             joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
             TextBlock textBlock = new TextBlock {
-                FontSize = 20,
+                FontSize = 40,
                 Width = 100,
                 Height = 100,
                 Foreground = new SolidColorBrush(Colors.Red),
@@ -184,7 +184,7 @@ namespace KinectStreams
             joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
             TextBlock textBlock = new TextBlock {
-                FontSize = 25,
+                FontSize = 50,
                 Width = 100,
                 Height = 100,
                 Foreground = new SolidColorBrush(Colors.LawnGreen),
