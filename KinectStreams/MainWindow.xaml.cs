@@ -162,9 +162,10 @@ namespace KinectStreams
             //text display part
             --timeStamp;
             this.Timestamp.Text = timeStamp.ToString();
-            if ( timeStamp <= 0 ) { countGes = 0; _displayDegree = DisplayTypes.showDefault;
-            this.motioncheckerTF.Text = "";
-            b4Gesture = "any";
+            if (timeStamp <= 0) {
+                countGes = 0; _displayDegree = DisplayTypes.showDefault;
+                this.motioncheckerTF.Text = "";
+                b4Gesture = "any";
             }
             this.count.Text = "count : " + countGes.ToString();
             
@@ -697,7 +698,7 @@ namespace KinectStreams
                                 motionChecker.checkFrontlift[1] = true;
                             }
                             break;
-                        }
+                        } 
 
                     case gKind.frontlift: {
                         motionChecker.checkFrontlift[2] = true;

@@ -164,7 +164,10 @@ namespace KinectStreams
                 Width = 100,
                 Height = 100,
                 Foreground = new SolidColorBrush(Colors.Red),
-                Text = string2draw
+                FontWeight = FontWeights.UltraBold,
+
+                Text = string2draw,
+               
             };
 
             Canvas.SetLeft(textBlock, joint.X - textBlock.Width / 2);
@@ -188,7 +191,8 @@ namespace KinectStreams
                 Width = 100,
                 Height = 100,
                 Foreground = new SolidColorBrush(Colors.LawnGreen),
-                
+                                FontWeight = FontWeights.UltraBold,
+
                 //Background = new SolidColorBrush(Colors.Black),
                 Text = String2draw.ToString()
 
