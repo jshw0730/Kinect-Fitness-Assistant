@@ -38,6 +38,12 @@ namespace KinectStreams
 
     static class gKind
     {
+        public const int gestureA = 0;
+        public const int gestureB = 1;
+        public const int gestureC = 2;
+        public const int gesture = 2;
+
+        /*
         public const int sideliftA = 1;
         public const int sideliftB = 2;
         public const int sidelift = 3;
@@ -69,7 +75,7 @@ namespace KinectStreams
         public const int biceps_curlA = 22;
         public const int biceps_curlB = 23;
         public const int biceps_curl = 24;
-
+        */ 
     }
 
     public partial class MainWindow : Window 
@@ -84,7 +90,7 @@ namespace KinectStreams
         
         #region Members
 
-        Mode _mode = Mode.Infrared;
+        Mode _mode = Mode.Depth;
 
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
@@ -99,6 +105,12 @@ namespace KinectStreams
 
         int countGes = 0; //checking count
         int timeStamp = 180; //time limit for one Gesture (for count)
+
+        bool visitB = false;
+        bool visitC = false;
+
+        int cntGesNum = 0;
+        string cntGesture = "any";
         string b4Gesture = "any";
 
         MotionCheck motionChecker = new MotionCheck();
@@ -106,7 +118,7 @@ namespace KinectStreams
 
         public static int _displayDegree =  DisplayTypes.showDefault;
             
-            #endregion
+        #endregion
 
         #region Constructor
 
@@ -163,7 +175,10 @@ namespace KinectStreams
             --timeStamp;
             this.Timestamp.Text = timeStamp.ToString();
             if (timeStamp <= 0) {
-                countGes = 0; _displayDegree = DisplayTypes.showDefault;
+                motionChecker.countSetter(cntGesture,
+                                           motionChecker.countGetter(cntGesture) + countGes);
+                countGes = 0; 
+                _displayDegree = DisplayTypes.showDefault;
                 this.motioncheckerTF.Text = "";
                 b4Gesture = "any";
             }
@@ -298,9 +313,14 @@ namespace KinectStreams
             GestureResultView result = sender as GestureResultView;
             
             //part of canvas text
-            this.GestureNotifier.Text = result.GestureKind;
+            this.GestureNotifier.Text = result.GestureKind; //show what gesture is getting
+            this.GestureNotifier.Text += result.GestureNumber;
 
-            //sidelift counting algorithm
+
+
+            #region b4code - non-common logic
+            /*
+
             #region sidelift
 
             if (result.GestureKind == "sidelift" 
@@ -311,9 +331,6 @@ namespace KinectStreams
                     case gKind.sideliftB: {
                             motionChecker.checkSidelift[1] = true;
 
-                            /*debug*/
-                            this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-
                             //counting part
                             if (motionChecker.checkSidelift[1] && motionChecker.checkSidelift[2]) {      // A-B-C-B 도달
 
@@ -321,19 +338,7 @@ namespace KinectStreams
                                 motionChecker.initializeChecker();          //initializing checkers to false
 
 
-                                /*debug*/
-                                this.sideliftmotionA.Text = motionChecker.checkSidelift[0].ToString();
-                                this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-                                this.sideliftmotionC.Text = motionChecker.checkSidelift[2].ToString();
-
-                                this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
-                                this.squatmotionB.Text = motionChecker.checkSquat[1].ToString();
-                                this.squatmotionC.Text = motionChecker.checkSquat[2].ToString();
-
-                                this.shoulderpressmotionA.Text = motionChecker.checkShoulderpress[0].ToString();
-                                this.shoulderpressmotionB.Text = motionChecker.checkShoulderpress[1].ToString();
-                                this.shoulderpressmotionC.Text = motionChecker.checkShoulderpress[2].ToString();
-
+                        
                                 this.motioncheckerTF.Text += "SL ";
 
                                 b4Gesture = "sidelift"; //for lock
@@ -352,73 +357,21 @@ namespace KinectStreams
 
                     case gKind.sidelift: {
                             motionChecker.checkSidelift[2] = true;
-                            /*debug*/
-                            this.sideliftmotionC.Text = "1";
                             break;
                         }
                     case gKind.sideliftA: {
 
                             motionChecker.initializeChecker();
 
-                            /*debug*/
-                            this.sideliftmotionA.Text = motionChecker.checkSidelift[0].ToString();
-                            this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-                            this.sideliftmotionC.Text = motionChecker.checkSidelift[2].ToString();
-
-                            this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
-                            this.squatmotionB.Text = motionChecker.checkSquat[1].ToString();
-                            this.squatmotionC.Text = motionChecker.checkSquat[2].ToString();
-
-                            this.shoulderpressmotionA.Text = motionChecker.checkShoulderpress[0].ToString();
-                            this.shoulderpressmotionB.Text = motionChecker.checkShoulderpress[1].ToString();
-                            this.shoulderpressmotionC.Text = motionChecker.checkShoulderpress[2].ToString();
-
+                    
 
                             motionChecker.checkSidelift[0] = true;
 
-                            /*debug*/
-                            this.sideliftmotionA.Text = motionChecker.checkSidelift[0].ToString();
                             break;
                         }
                 }
             }
 
-            #region b4 code
-            /*
-                case "sideliftA": {
-                    motionChecker.checkSidelift[0] = true;
-                    //_displayDegree = DisplayTypes.showUpperSide;
-                    break;
-                }
-
-                case "sideliftB": { 
-                    motionChecker.checkSidelift[1] = true;
-
-                    //counting part
-                    if (motionChecker.checkSidelift[1]) { 
-                        
-                        if( motionChecker.checkSidelift[2]) {               // A-B-C-B 도달
-                            motionChecker.initializeChecker();              //initializing checkers to false
-
-                            motionChecker.checkMotionEnd = true;            //운동동작 하나 완성 
-                            _displayDegree = DisplayTypes.showUpperSide;    //해당 운동에 맞는 정보 표시
-                            timeStamp = 180;
-                        }//it's end of one motion
-
-                        else{   //A-B 도달
-                            motionChecker.checkSidelift[1] = true;
-                        }// it's starting of one motion 
-                    }
-                    
-                    break;                    
-                }
-
-                case "sidelift": {
-                    motionChecker.checkSidelift[2] = true;
-                    break;
-                    }
-                 */
-            #endregion
 
                 #endregion sidelift
 
@@ -440,19 +393,6 @@ namespace KinectStreams
 
                                 //it's end of one motion
                                 motionChecker.initializeChecker();          //initializing checkers to false
-
-                                /*debug*/
-                                this.sideliftmotionA.Text = motionChecker.checkSidelift[0].ToString();
-                                this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-                                this.sideliftmotionC.Text = motionChecker.checkSidelift[2].ToString();
-
-                                this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
-                                this.squatmotionB.Text = motionChecker.checkSquat[1].ToString();
-                                this.squatmotionC.Text = motionChecker.checkSquat[2].ToString();
-
-                                this.shoulderpressmotionA.Text = motionChecker.checkShoulderpress[0].ToString();
-                                this.shoulderpressmotionB.Text = motionChecker.checkShoulderpress[1].ToString();
-                                this.shoulderpressmotionC.Text = motionChecker.checkShoulderpress[2].ToString();
 
                                 this.motioncheckerTF.Text += "SQ ";
 
@@ -479,19 +419,6 @@ namespace KinectStreams
 
                             motionChecker.initializeChecker();
 
-                            /*debug*/
-                            this.sideliftmotionA.Text = motionChecker.checkSidelift[0].ToString();
-                            this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-                            this.sideliftmotionC.Text = motionChecker.checkSidelift[2].ToString();
-
-                            this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
-                            this.squatmotionB.Text = motionChecker.checkSquat[1].ToString();
-                            this.squatmotionC.Text = motionChecker.checkSquat[2].ToString();
-
-                            this.shoulderpressmotionA.Text = motionChecker.checkShoulderpress[0].ToString();
-                            this.shoulderpressmotionB.Text = motionChecker.checkShoulderpress[1].ToString();
-                            this.shoulderpressmotionC.Text = motionChecker.checkShoulderpress[2].ToString();
-
                             motionChecker.checkSquat[0] = true;
 
                             this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
@@ -503,33 +430,33 @@ namespace KinectStreams
             #endregion squat
 
             #region shoulderpress
+            
 
-            else if (result.GestureKind == "shoulderpress" 
-                && (b4Gesture == "shoulderpress"|| b4Gesture == "any" )) {
+            else if (result.GestureKind == "shoulderpress"
+                    && (b4Gesture == "shoulderpress" || b4Gesture == "any")) {
 
                 switch (result.GestureNumber) {
                     case gKind.shoulderpressB: {
                             motionChecker.checkShoulderpress[1] = true;
-                            this.shoulderpressmotionB.Text = "1";
+                        
+                            // it's starting of one motion
+                            //else if (motionChecker.checkShoulderpress[1] && !motionChecker.checkShoulderpress[2]) {
+                                motionChecker.checkShoulderpress[1] = true;
+                            //}
+                            break;
+                        }
+
+                    case gKind.shoulderpress: {
+                            motionChecker.checkShoulderpress[2] = true;
+                            break;
+                        }
+                    case gKind.shoulderpressA: {
 
                             //counting part
                             if (motionChecker.checkShoulderpress[1] && motionChecker.checkShoulderpress[2]) {      // B-C-B 도달
 
                                 //it's end of one motion
                                 motionChecker.initializeChecker();          //initializing checkers to false
-
-                                /*debug*/
-                                this.sideliftmotionA.Text = motionChecker.checkSidelift[0].ToString();
-                                this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-                                this.sideliftmotionC.Text = motionChecker.checkSidelift[2].ToString();
-
-                                this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
-                                this.squatmotionB.Text = motionChecker.checkSquat[1].ToString();
-                                this.squatmotionC.Text = motionChecker.checkSquat[2].ToString();
-
-                                this.shoulderpressmotionA.Text = motionChecker.checkShoulderpress[0].ToString();
-                                this.shoulderpressmotionB.Text = motionChecker.checkShoulderpress[1].ToString();
-                                this.shoulderpressmotionC.Text = motionChecker.checkShoulderpress[2].ToString();
 
                                 this.motioncheckerTF.Text += "SP ";
 
@@ -539,47 +466,22 @@ namespace KinectStreams
                                 timeStamp = 180;
                             }
 
-                            // it's starting of one motion
-                            else if (motionChecker.checkShoulderpress[1] && !motionChecker.checkShoulderpress[2]) {
-                                motionChecker.checkShoulderpress[1] = true; 
-                                this.shoulderpressmotionB.Text = motionChecker.checkShoulderpress[1].ToString();
-                            }
-                            break;
-                        }
-
-                    case gKind.shoulderpress: {
-                            motionChecker.checkShoulderpress[2] = true;
-                            this.shoulderpressmotionC.Text = motionChecker.checkShoulderpress[2].ToString(); 
-                            break;
-                        }
-                    case gKind.shoulderpressA: {
-
                             motionChecker.initializeChecker();
-
-                            /*debug*/
-                            this.sideliftmotionA.Text = motionChecker.checkSidelift[0].ToString();
-                            this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-                            this.sideliftmotionC.Text = motionChecker.checkSidelift[2].ToString();
-
-                            this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
-                            this.squatmotionB.Text = motionChecker.checkSquat[1].ToString();
-                            this.squatmotionC.Text = motionChecker.checkSquat[2].ToString();
-
-                            this.shoulderpressmotionA.Text = motionChecker.checkShoulderpress[0].ToString();
-                            this.shoulderpressmotionB.Text = motionChecker.checkShoulderpress[1].ToString();
-                            this.shoulderpressmotionC.Text = motionChecker.checkShoulderpress[2].ToString();
-
                             motionChecker.checkShoulderpress[0] = true;
-
-                            /*debug*/
-                            this.shoulderpressmotionA.Text = motionChecker.checkShoulderpress[0].ToString();
 
                             break;
                         }
 
                 }
             }
+         
+            
+
             #endregion shoulderpress
+
+
+
+
 
             #region row
 
@@ -668,7 +570,6 @@ namespace KinectStreams
                 }
             }
             #endregion 
-
             
             #region frontlift
 
@@ -757,8 +658,7 @@ namespace KinectStreams
                 }
             }
             #endregion 
-
-                            
+                           
             #region biceps_curl
 
             else if (result.GestureKind == "biceps_curl"
@@ -802,62 +702,77 @@ namespace KinectStreams
                 }
             }
             #endregion 
-
-
-            #region b4code
-            /*
-            if ( result.GestureKind == "sideliftB" ) {
-                motionChecker.checkSidelift[1] = true;
-                _displayDegree = result.GestureNumber;
-
-                //counting part
-                if ( motionChecker.checkSidelift[1] && motionChecker.checkSidelift[2] ) {
-                    motionChecker.initializeChecker();    //initializing checkers to false
-
-                    motionChecker.checkMotionEnd = true;
-                    timeStamp = 180;
-
-                }//both are true, its end of one motion
-
-                else if ( motionChecker.checkSidelift[1] && !motionChecker.checkSidelift[2] ) { 
-                    motionChecker.checkSidelift[1] = true; 
-                } // it's starting of one motion 
-            }
-
-
-            if ( result.GestureKind == "sidelift" ) { 
-                motionChecker.checkSidelift[2] = true;
-                _displayDegree = result.GestureNumber;
-            }
-            if ( result.GestureKind == "sideliftA" ) { 
-                motionChecker.checkSidelift[0] = true;
-                _displayDegree = result.GestureNumber;
-            }
             */
+#endregion
+
+            #region common logic
+            
+            
+            cntGesNum = result.GestureNumber;
+            cntGesture = result.GestureKind;
+            
+            if ((cntGesture == b4Gesture) || (b4Gesture == "any")) {
+
+                switch (cntGesNum) {
+                    case gKind.gestureB: {
+                            motionChecker.checkSetter(cntGesture, cntGesNum, true); //B on
+                            if (motionChecker.checkGetter(cntGesture, gKind.gestureC)) {
+                                visitC = true;  //두번쨰 B방문시 앞서 C를 방문했는지 체크함 (a->B->C->B ?)
+                            }
+                            break;
+                        }
+                    case gKind.gestureC: {
+                            motionChecker.checkSetter(cntGesture, cntGesNum, true); //C on
+                            if (motionChecker.checkGetter(cntGesture, gKind.gestureB)) {
+                                visitB = true; //C방문시 앞서 B를 방문했는지 체크함(a->B->C ?)
+                            }
+                            break;
+                        }
+                        
+                    case gKind.gestureA: {
+
+                            //counting part
+                            if (motionChecker.checkGetter(cntGesture, gKind.gestureB)
+                              && motionChecker.checkGetter(cntGesture, gKind.gestureC)
+                              && visitB 
+                              && visitC  
+                             ) {      // (a-B-C-B-A ?)
+
+                                //it's end of one motion
+                                motionChecker.initializeChecker();          //initializing checkers to false
+
+                                this.motioncheckerTF.Text += cntGesture; //for debug, display current gesture
+
+                                b4Gesture = cntGesture; //save current ges for lock
+
+                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
+
+                                _displayDegree = motionChecker.showInfoGetter(cntGesture);  //해당 운동에 맞는 정보 표시
+                                timeStamp = 180; //reset timestamp 
+                            }
+
+                            //initializing part
+                            motionChecker.initializeChecker(); 
+                            visitB = false;
+                            visitC = false; 
+
+                            motionChecker.checkSetter(cntGesture, cntGesNum, true); //A on
+                            break;
+                        }
+
+                }
+            }
             #endregion
+                  
 
-
-            if ( motionChecker.checkMotionEnd ) {// &&_displayDegree == savingBeforeGesture   ) { 
+            if ( motionChecker.checkMotionEnd ) {
                 motionChecker.checkMotionEnd = false;
-                this.motioncheckerTF.Text += "false ";
+                this.motioncheckerTF.Text += " ";
 
                 motionChecker.initializeChecker();
+
+
                 ++countGes;
-
-
-                /*debug*/
-                this.sideliftmotionA.Text = motionChecker.checkSidelift[0].ToString();
-                this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-                this.sideliftmotionC.Text = motionChecker.checkSidelift[2].ToString();
-
-                this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
-                this.squatmotionB.Text = motionChecker.checkSquat[1].ToString();
-                this.squatmotionC.Text = motionChecker.checkSquat[2].ToString();
-
-                this.shoulderpressmotionA.Text = motionChecker.checkShoulderpress[0].ToString();
-                this.shoulderpressmotionB.Text = motionChecker.checkShoulderpress[1].ToString();
-                this.shoulderpressmotionC.Text = motionChecker.checkShoulderpress[2].ToString();
-
 
             } //if time is not over, then go up for count
 

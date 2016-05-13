@@ -15,7 +15,7 @@
         		Background="Yellow"
         		HorizontalAlignment="Left"
         		VerticalAlignment="Top"
-        		Opacity="0.0" Height="50" Width="59" Canvas.Left="83" Canvas.Top="-33" Margin="250,0,0,0"/>
+        		Opacity="1.0" Height="50" Width="123" Canvas.Left="83" Canvas.Top="-33" Margin="859,74,0,0"/>
         <TextBlock x:Name="count"
         		Text="count : 0"
         		FontSize="120"
