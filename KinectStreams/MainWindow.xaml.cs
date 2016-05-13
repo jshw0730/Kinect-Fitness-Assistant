@@ -153,7 +153,7 @@ namespace KinectStreams
                 result.PropertyChanged += GestureResult_PropertyChanged;
                 this.gestureDetectorList.Add(detector);
             }
-            //////////////////////////
+            
         }
 
         private void Window_Closed(object sender, EventArgs e) {
@@ -170,6 +170,12 @@ namespace KinectStreams
             var reference = e.FrameReference.AcquireFrame();
 
 
+            // If the Frame has expired by the time we process this event, return.
+            if (reference == null)
+            {
+                return;
+            }
+   
 
             //text display part
             --timeStamp;
@@ -203,20 +209,104 @@ namespace KinectStreams
             }
 
             // Body
+
+            
+    
+
+
             using (var frame = reference.BodyFrameReference.AcquireFrame()) {
+                
                 if (frame != null) {
 
                     canvas.Children.Clear();
 
-                    _bodies = new Body[frame.BodyFrameSource.BodyCount];
+                    int bodycounts = frame.BodyFrameSource.BodyCount;
+                    _bodies = new Body[bodycounts];
 
                     frame.GetAndRefreshBodyData(_bodies);
 
-                    foreach (var body in _bodies) {
+
+                    /****Closest person gets control*****///
+/*
+private void Reader_MultiSourceFrameArrived(
+      MultiSourceFrameReader sender, 
+      MultiSourceFrameArrivedEventArgs e)
+{
+   MultiSourceFrame multiSourceFrame = e.FrameReference.AcquireFrame();
+   
+   // If the Frame has expired by the time we process this event, return.
+   if (multiSourceFrame == null)
+   {
+      return;
+   }
+   
+   using (bodyFrame = 
+      multiSourceFrame.BodyFrameReference.AcquireFrame())
+   {
+      int activeBodyIndex = -1; // Default to impossible value.
+      Body[] bodiesArray = new Body[
+         this.kinectSensor.BodyFrameSource.BodyCount];
+	  
+      if (bodyFrame != null)
+      {
+         bodyFrame.GetAndRefreshBodyData(bodies);
+         
+         // Iterate through all bodies, 
+         // no point persisting activeBodyIndex because must 
+         // compare with depth of all bodies so no gain in efficiency.
+
+         float minZPoint = float.MaxValue; // Default to impossible value
+         for (int i = 0; i < bodiesArray.Length; i++)
+         {
+            body = bodiesArray[i];
+            if (body.IsTracked)
+            {
+               float zMeters = 
+                  body.Joints[JointType.SpineBase].Position.Z;
+               if (zMeters < minZPoint)
+               {
+                  minZPoint = zMeters;
+                  activeBodyIndex = i;
+               }
+            }
+         }
+
+         
+         // If active body is still active after checking and 
+         // updating, use it
+         if (activeBodyIndex != -1)
+         {
+            Body body = bodiesArray[activeBodyIndex];
+            // Do stuff with known active body.
+         }
+      }
+   }
+}
+*/
+
+/*
+ * 
+ * 현재 문제인점.
+ * foreach를 갈아야한다. 
+ * 이걸 갈아서 하나의 body에 대해서만 값을 보도록 설정해야함.
+ * 이 작업을 하면 하나의 body에 대해서만 작업을 하도록 만들 수 있고, 
+ * 또한 모든 body에 대해서 작업하지 않으므로 작업량 자체가 줄어들게 된다.
+ * 물론 실질적인 작업량은 크게 줄지 않고 (화면에 대한 표시만 안하게 되므로...)
+ * 겉보기에만 덜 작업하는 것으로 판별될 것.
+ * 가장 큰 문제는 표기는 하나로 되는데 제스쳐는 따로 인식하는 경우인데, 이때는 진짜 답이없다. 시발.
+*/
+
+
+   
+
+                    foreach (Body body in _bodies) {
                         if (body != null) {
                             if (body.IsTracked) {
+             
+
+
                                 // Draw skeleton.
-                                if (_displayBody) {
+                                if ( _displayBody) {
 
                                     _filter.UpdateFilter(body);
                                     _filteredJoints = _filter.GetFilteredJoints();
@@ -308,7 +398,7 @@ namespace KinectStreams
         }//end_method
 
 
-        //////////added for gesture
+        //gesture
         void GestureResult_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             GestureResultView result = sender as GestureResultView;
             
@@ -317,396 +407,7 @@ namespace KinectStreams
             this.GestureNotifier.Text += result.GestureNumber;
 
 
-
-            #region b4code - non-common logic
-            /*
-
-            #region sidelift
-
-            if (result.GestureKind == "sidelift" 
-                 && ( b4Gesture == "sidelift" || b4Gesture == "any" )) {
-
-
-                switch (result.GestureNumber) {
-                    case gKind.sideliftB: {
-                            motionChecker.checkSidelift[1] = true;
-
-                            //counting part
-                            if (motionChecker.checkSidelift[1] && motionChecker.checkSidelift[2]) {      // A-B-C-B 도달
-
-                                //it's end of one motion
-                                motionChecker.initializeChecker();          //initializing checkers to false
-
-
-                        
-                                this.motioncheckerTF.Text += "SL ";
-
-                                b4Gesture = "sidelift"; //for lock
-
-                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
-                                _displayDegree = motionChecker.showInfoSidelift;  //해당 운동에 맞는 정보 표시
-                                timeStamp = 180;
-                            }
-
-                            // it's starting of one motion
-                            else if (motionChecker.checkSidelift[1] && !motionChecker.checkSidelift[2]) {
-                                motionChecker.checkSidelift[1] = true;
-                            }
-                            break;
-                        }
-
-                    case gKind.sidelift: {
-                            motionChecker.checkSidelift[2] = true;
-                            break;
-                        }
-                    case gKind.sideliftA: {
-
-                            motionChecker.initializeChecker();
-
-                    
-
-                            motionChecker.checkSidelift[0] = true;
-
-                            break;
-                        }
-                }
-            }
-
-
-                #endregion sidelift
-
-            #region squat
-
-            else if (result.GestureKind == "squat"
-                                 && ( b4Gesture == "squat"|| b4Gesture == "any" )) {
-
-                switch (result.GestureNumber) {
-
-                    case gKind.squatB: {
-
-
-                            motionChecker.checkSquat[1] = true;
-                            this.squatmotionB.Text = motionChecker.checkSquat[1].ToString();
-
-                            //counting part
-                            if (motionChecker.checkSquat[1] && motionChecker.checkSquat[2]) {      // A-B-C-B 도달
-
-                                //it's end of one motion
-                                motionChecker.initializeChecker();          //initializing checkers to false
-
-                                this.motioncheckerTF.Text += "SQ ";
-
-                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
-                                b4Gesture = "squat";//for lock
-                                _displayDegree = motionChecker.showInfoSquat;  //해당 운동에 맞는 정보 표시
-                                timeStamp = 180;
-                            }
-
-                            // it's starting of one motion
-                            else if (motionChecker.checkSquat[1] && !motionChecker.checkSquat[2]) {
-                                motionChecker.checkSquat[1] = true;
-                                this.sideliftmotionB.Text = motionChecker.checkSidelift[1].ToString();
-                            }
-                            break;
-                        }
-
-                    case gKind.squat: {
-                            motionChecker.checkSquat[2] = true;
-                            this.squatmotionC.Text = motionChecker.checkSquat[2].ToString();
-                            break;
-                        }
-                    case gKind.squatA: {
-
-                            motionChecker.initializeChecker();
-
-                            motionChecker.checkSquat[0] = true;
-
-                            this.squatmotionA.Text = motionChecker.checkSquat[0].ToString();
-                            break;
-                        }
-                }
-            }
-
-            #endregion squat
-
-            #region shoulderpress
-            
-
-            else if (result.GestureKind == "shoulderpress"
-                    && (b4Gesture == "shoulderpress" || b4Gesture == "any")) {
-
-                switch (result.GestureNumber) {
-                    case gKind.shoulderpressB: {
-                            motionChecker.checkShoulderpress[1] = true;
-                        
-                            // it's starting of one motion
-                            //else if (motionChecker.checkShoulderpress[1] && !motionChecker.checkShoulderpress[2]) {
-                                motionChecker.checkShoulderpress[1] = true;
-                            //}
-                            break;
-                        }
-
-                    case gKind.shoulderpress: {
-                            motionChecker.checkShoulderpress[2] = true;
-                            break;
-                        }
-                    case gKind.shoulderpressA: {
-
-                            //counting part
-                            if (motionChecker.checkShoulderpress[1] && motionChecker.checkShoulderpress[2]) {      // B-C-B 도달
-
-                                //it's end of one motion
-                                motionChecker.initializeChecker();          //initializing checkers to false
-
-                                this.motioncheckerTF.Text += "SP ";
-
-                                b4Gesture = "shoulderpress"; //for lock
-                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
-                                _displayDegree = motionChecker.showInfoShoulderpress;  //해당 운동에 맞는 정보 표시
-                                timeStamp = 180;
-                            }
-
-                            motionChecker.initializeChecker();
-                            motionChecker.checkShoulderpress[0] = true;
-
-                            break;
-                        }
-
-                }
-            }
-         
-            
-
-            #endregion shoulderpress
-
-
-
-
-
-            #region row
-
-            else if (result.GestureKind == "row"
-                && (b4Gesture == "row" || b4Gesture == "any")) {
-
-                switch (result.GestureNumber) {
-                    case gKind.rowB: {
-                            motionChecker.checkRow[1] = true;
-
-                            //counting part
-                            if (motionChecker.checkRow[1] && motionChecker.checkRow[2]) {      // B-C-B 도달
-
-                                //it's end of one motion
-                                motionChecker.initializeChecker();          //initializing checkers to false
-
-                                this.motioncheckerTF.Text += "Ro ";
-
-                                b4Gesture = "row"; //for lock
-                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
-                                _displayDegree = motionChecker.showInfoRow;  //해당 운동에 맞는 정보 표시
-                                timeStamp = 180;
-                            }
-
-                            // it's starting of one motion
-                            else if (motionChecker.checkRow[1] && !motionChecker.checkRow[2]) {
-                                motionChecker.checkRow[1] = true;
-                            }
-                            break;
-                        }
-
-                    case gKind.row: {
-                            motionChecker.checkRow[2] = true;
-                            break;
-                        }
-                    case gKind.rowA: {
-                            motionChecker.initializeChecker();
-                            motionChecker.checkRow[0] = true;
-                            break;
-                        }
-
-                }
-            }
-            #endregion 
-            
-            #region lunge
-
-            else if (result.GestureKind == "lunge"
-                && (b4Gesture == "lunge" || b4Gesture == "any")) {
-
-                switch (result.GestureNumber) {
-                    case gKind.lungeB: {
-                        motionChecker.checkLunge[1] = true;
-
-                            //counting part
-                        if (motionChecker.checkLunge[1] && motionChecker.checkLunge[2]) {      // B-C-B 도달
-
-                                //it's end of one motion
-                                motionChecker.initializeChecker();          //initializing checkers to false
-
-                                this.motioncheckerTF.Text += "Lg ";
-
-                                b4Gesture = "lunge"; //for lock
-                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
-                                _displayDegree = motionChecker.showInfoLunge;  //해당 운동에 맞는 정보 표시
-                                timeStamp = 180;
-                            }
-
-                            // it's starting of one motion
-                        else if (motionChecker.checkLunge[1] && !motionChecker.checkLunge[2]) {
-                            motionChecker.checkLunge[1] = true;
-                            }
-                            break;
-                        }
-
-                    case gKind.lunge: {
-                        motionChecker.checkLunge[2] = true;
-                            break;
-                        }
-                    case gKind.lungeA: {
-                            motionChecker.initializeChecker();
-                            motionChecker.checkLunge[0] = true;
-                            break;
-                        }
-
-                }
-            }
-            #endregion 
-            
-            #region frontlift
-
-            else if (result.GestureKind == "frontlift"
-                && (b4Gesture == "frontlift" || b4Gesture == "any")) {
-
-                switch (result.GestureNumber) {
-                    case gKind.frontliftB: {
-                        motionChecker.checkFrontlift[1] = true;
-
-                            //counting part
-                            if (motionChecker.checkFrontlift[1] && motionChecker.checkFrontlift[2]) {      // B-C-B 도달
-
-                                //it's end of one motion
-                                motionChecker.initializeChecker();          //initializing checkers to false
-
-                                this.motioncheckerTF.Text += "FL ";
-
-                                b4Gesture = "frontlift"; //for lock
-                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
-                                _displayDegree = motionChecker.showInfoFrontlift;  //해당 운동에 맞는 정보 표시
-                                timeStamp = 180;
-                            }
-
-                                // it's starting of one motion
-                            else if (motionChecker.checkFrontlift[1] && !motionChecker.checkFrontlift[2]) {
-                                motionChecker.checkFrontlift[1] = true;
-                            }
-                            break;
-                        } 
-
-                    case gKind.frontlift: {
-                        motionChecker.checkFrontlift[2] = true;
-                            break;
-                        }
-                    case gKind.frontliftA: {
-                            motionChecker.initializeChecker();
-                            motionChecker.checkFrontlift[0] = true;
-                            break;
-                        }
-
-                }
-            }
-            #endregion 
-                            
-            #region deadlift
-
-            else if (result.GestureKind == "deadlift"
-                && (b4Gesture == "deadlift" || b4Gesture == "any")) {
-
-                switch (result.GestureNumber) {
-                    case gKind.deadliftB: {
-                        motionChecker.checkDeadlift[1] = true;
-
-                            //counting part
-                        if (motionChecker.checkDeadlift[1] && motionChecker.checkDeadlift[2]) {      // B-C-B 도달
-
-                                //it's end of one motion
-                                motionChecker.initializeChecker();          //initializing checkers to false
-
-                                this.motioncheckerTF.Text += "DL ";
-
-                                b4Gesture = "deadlift"; //for lock
-                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
-                                _displayDegree = motionChecker.showInfoDeadlift;  //해당 운동에 맞는 정보 표시
-                                timeStamp = 180;
-                            }
-
-                                // it's starting of one motion
-                        else if (motionChecker.checkDeadlift[1] && !motionChecker.checkDeadlift[2]) {
-                            motionChecker.checkDeadlift[1] = true;
-                            }
-                            break;
-                        }
-
-                    case gKind.deadlift: {
-                        motionChecker.checkDeadlift[2] = true;
-                            break;
-                        }
-                    case gKind.deadliftA: {
-                            motionChecker.initializeChecker();
-                            motionChecker.checkDeadlift[0] = true;
-                            break;
-                        }
-
-                }
-            }
-            #endregion 
-                           
-            #region biceps_curl
-
-            else if (result.GestureKind == "biceps_curl"
-                && (b4Gesture == "biceps_curl" || b4Gesture == "any")) {
-
-                switch (result.GestureNumber) {
-                    case gKind.biceps_curlB: {
-                        motionChecker.checkBiceps_curl[1] = true;
-
-                            //counting part
-                        if (motionChecker.checkBiceps_curl[1] && motionChecker.checkBiceps_curl[2]) {      // B-C-B 도달
-
-                                //it's end of one motion
-                                motionChecker.initializeChecker();          //initializing checkers to false
-
-                                this.motioncheckerTF.Text += "BC ";
-
-                                b4Gesture = "biceps_curl"; //for lock
-                                motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
-                                _displayDegree = motionChecker.showInfoBiceps_curl;  //해당 운동에 맞는 정보 표시
-                                timeStamp = 180;
-                            }
-
-                                    // it's starting of one motion
-                        else if (motionChecker.checkBiceps_curl[1] && !motionChecker.checkBiceps_curl[2]) {
-                            motionChecker.checkBiceps_curl[1] = true;
-                            }
-                            break;
-                        }
-
-                    case gKind.biceps_curl: {
-                        motionChecker.checkBiceps_curl[2] = true;
-                            break;
-                        }
-                    case gKind.biceps_curlA: {
-                            motionChecker.initializeChecker();
-                            motionChecker.checkBiceps_curl[0] = true;
-                            break;
-                        }
-
-                }
-            }
-            #endregion 
-            */
-#endregion
-
-            #region common logic
-            
+            #region common logic            
             
             cntGesNum = result.GestureNumber;
             cntGesture = result.GestureKind;
