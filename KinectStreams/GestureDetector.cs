@@ -23,29 +23,51 @@ namespace KinectStreams {
     public class GestureDetector : IDisposable {
         //public RoutedEventHandler GestureRecognized { get; set; }
 
-        //private readonly string gestureDatabase = @"Database\SampleDatabase.gbd";
-
-
-            
-        private readonly string gestureDatabase_forTest = @"Database\gestureForTest.gbd";
-        private readonly string gestureForTest = "gestureForTest";
-
-
-
-        
-       
-
-        private readonly string gestureDatabase_squat = @"Database\gesture_squat.gbd";
-        private readonly string squatGestureName = "gesture_squat";
-        private readonly string squatProgGestureName = "gesture_squatProgress";
-
-
+        //gesture - sidelift
         private readonly string gestureDatabase_sidelift = @"Database\gesture_sidelift.gbd";
             private readonly string sideliftGestureName = "gesture_sidelift";
             private readonly string sideliftGestureName_A = "gesture_sideliftA";
             private readonly string sideliftGestureName_B = "gesture_sideliftB";
-            private readonly string sideliftProgGestureName = "gesture_sideliftProgress";
+        //    private readonly string sideliftProgGestureName = "gesture_sideliftProgress";
+        
+        //gesture - squat
+        private readonly string gestureDatabase_squat = @"Database\gesture_squat.gbd";
+            private readonly string squatGestureName = "Squat";
+            private readonly string squatGestureName_A = "squatA";
+            private readonly string squatGestureName_B = "SquatB";
+        //gesture - shoulderpress
+        private readonly string gestureDatabase_shoulderpress = @"Database\gesture_shoulderpress.gbd";
+            private readonly string shoulderpressGestureName = "gesture_shoulderpress";
+            private readonly string shoulderpressGestureName_A = "gesture_shoulderpressA";
+            private readonly string shoulderpressGestureName_B = "gesture_shoulderpressB";
+        
 
+        //gesture - row
+        private readonly string gestureDatabase_row = @"Database\gesture_row.gbd";
+            private readonly string rowGestureName = "gesture_rowC";
+            private readonly string rowGestureName_A = "gesture_rowA";
+            private readonly string rowGestureName_B = "gesture_rowB";
+        //gesture - lunge
+        private readonly string gestureDatabase_lunge = @"Database\gesture_lunge.gbd";
+            private readonly string lungeGestureName = "gesture_lungeC";
+            private readonly string lungeGestureName_A = "gesture_lungeA";
+            private readonly string lungeGestureName_B = "gesture_lungeB";
+        //gesture - frontlift
+        private readonly string gestureDatabase_frontlift = @"Database\gesture_frontlift.gbd";
+            private readonly string frontliftGestureName = "gesture_frontliftC";
+            private readonly string frontliftGestureName_A = "gesture_frontliftA";
+            private readonly string frontliftGestureName_B = "gesture_frontliftB";
+        //gesture - deadlift
+        private readonly string gestureDatabase_deadlift = @"Database\gesture_deadlift.gbd";
+            private readonly string deadliftGestureName = "gesture_deadliftC";
+            private readonly string deadliftGestureName_A = "gesture_deadliftA";
+            private readonly string deadliftGestureName_B = "gesture_deadliftB";
+        //gesture - biceps_curl
+        private readonly string gestureDatabase_biceps_curl = @"Database\gesture_biceps_curl.gbd";
+            private readonly string biceps_curlGestureName = "gesture_biceps_curlC";
+            private readonly string biceps_curlGestureName_A = "gesture_biceps_curlA";
+            private readonly string biceps_curlGestureName_B = "gesture_biceps_curlB";
+         
         /// <summary> Gesture frame source which should be tied to a body tracking ID </summary>
         private VisualGestureBuilderFrameSource vgbFrameSource = null;
 
@@ -79,52 +101,78 @@ namespace KinectStreams {
                 this.vgbFrameReader.FrameArrived += this.Reader_GestureFrameArrived;
             }
 
-            // load the gesture from the gesture database
+
+            #region load the gesture from the gesture database
 
             using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_sidelift) ) {
-
                 foreach ( Gesture gesture in database.AvailableGestures ) {
-                    if ( gesture.Name.Equals(this.sideliftGestureName) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-                        
-                    }
-                    if ( gesture.Name.Equals(this.sideliftGestureName_A) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-
-                    }
-                    if ( gesture.Name.Equals(this.sideliftGestureName_B) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-
-                    }
-
-
+                    if ( gesture.Name.Equals(this.sideliftGestureName) )   { this.vgbFrameSource.AddGesture(gesture); }
+                    if ( gesture.Name.Equals(this.sideliftGestureName_A) ) { this.vgbFrameSource.AddGesture(gesture); }
+                    if ( gesture.Name.Equals(this.sideliftGestureName_B) ) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
-
-            /**yes this for test**/
-            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_forTest) ) {
-
-                foreach ( Gesture gesture in database.AvailableGestures ) {
-                    if ( gesture.Name.Equals(this.gestureForTest) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-
-                    }
-                }
-            }
-
 
             using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_squat) ) {
-
                 foreach ( Gesture gesture in database.AvailableGestures ) {
-                    if ( gesture.Name.Equals(this.squatGestureName) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-                    }
-
-                    if ( gesture.Name.Equals(this.squatProgGestureName) ) {
-                        this.vgbFrameSource.AddGesture(gesture);
-                    }
+                    if ( gesture.Name.Equals(this.squatGestureName) )   { this.vgbFrameSource.AddGesture(gesture); }
+                    if ( gesture.Name.Equals(this.squatGestureName_A) ) { this.vgbFrameSource.AddGesture(gesture); }
+                    if ( gesture.Name.Equals(this.squatGestureName_B) ) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
+
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_shoulderpress)) {
+                foreach (Gesture gesture in database.AvailableGestures) {
+                    if (gesture.Name.Equals(this.shoulderpressGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.shoulderpressGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.shoulderpressGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                }
+            }
+
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_row)) {
+                foreach (Gesture gesture in database.AvailableGestures) {
+                    if (gesture.Name.Equals(this.rowGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.rowGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.rowGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                }
+            }
+
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_lunge)) {
+                foreach (Gesture gesture in database.AvailableGestures) {
+                    if (gesture.Name.Equals(this.lungeGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.lungeGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.lungeGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                }
+            }
+
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_frontlift)) {
+                foreach (Gesture gesture in database.AvailableGestures) {
+                    if (gesture.Name.Equals(this.frontliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.frontliftGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.frontliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                }
+            }
+
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_deadlift)) {
+                foreach (Gesture gesture in database.AvailableGestures) {
+                    if (gesture.Name.Equals(this.deadliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.deadliftGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.deadliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                }
+            }
+            /*
+            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_biceps_curl)) {
+                foreach (Gesture gesture in database.AvailableGestures) {
+                    if (gesture.Name.Equals(this.biceps_curlGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.biceps_curlGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                    if (gesture.Name.Equals(this.biceps_curlGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                }
+            }
+            */
+
+            
+
+            #endregion
+            
         }
 
 
@@ -211,6 +259,8 @@ namespace KinectStreams {
         /// <param name="e">event arguments</param>
         private void Reader_GestureFrameArrived(object sender, VisualGestureBuilderFrameArrivedEventArgs e) {
             VisualGestureBuilderFrameReference frameReference = e.FrameReference;
+            float vConfidence = 0.3f;
+
             using ( VisualGestureBuilderFrame frame = frameReference.AcquireFrame() ) {
                 if ( frame != null ) {
                     // get the discrete gesture results which arrived with the latest frame
@@ -224,15 +274,16 @@ namespace KinectStreams {
                             
                             if ( gesture.GestureType == GestureType.Discrete ) {
 
-                                
-                                //sidelift
+
+                                #region sidelift
                                 if ( gesture.Name.Equals(this.sideliftGestureName) ) {
                                     DiscreteGestureResult result = null;
                                     discreteResults.TryGetValue(gesture, out result);
 
                                     if ( result != null ) {
-                                        if ( result.Confidence > 0.2 )
-                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sidelift"); }
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureC, "sidelift"); 
+                                    }
                                 }
 
                                 if ( gesture.Name.Equals(this.sideliftGestureName_A) ) {
@@ -240,8 +291,8 @@ namespace KinectStreams {
                                     discreteResults.TryGetValue(gesture, out result);
 
                                     if ( result != null ) {
-                                        if(result.Confidence > 0.2)
-                                        this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sideliftA");
+                                        if (result.Confidence > vConfidence)
+                                        this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureA, "sidelift");
                                     }
                                 }
 
@@ -249,21 +300,229 @@ namespace KinectStreams {
                                     DiscreteGestureResult result = null;
                                     discreteResults.TryGetValue(gesture, out result);
                                     if ( result != null ) {
-                                        if ( result.Confidence > 0.1 )
-                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sideliftB");
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureB, "sidelift");
                                     }
                                 }
-                                
-                                //oh yes this is for test
-                                if ( gesture.Name.Equals(this.gestureForTest) ) {
+                                #endregion sidelift
+
+                                #region squat
+                                if (gesture.Name.Equals(this.squatGestureName)) {
                                     DiscreteGestureResult result = null;
                                     discreteResults.TryGetValue(gesture, out result);
-                                    // update the GestureResultView object with new gesture result values
-                                    if ( result != null ) {
-                                        if ( result.Confidence > 0.2 )
-                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, DisplayTypes.showUpperSide, "sidelift"); }
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureC, "squat");
+                                    }
                                 }
+
+                                if (gesture.Name.Equals(this.squatGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureA, "squat");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.squatGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureB, "squat");
+                                    }
+                                }
+                                #endregion squat
                                 
+                                #region shoulderpress
+                                if (gesture.Name.Equals(this.shoulderpressGestureName)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureC, "shoulderpress");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.shoulderpressGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureA, "shoulderpress");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.shoulderpressGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureB, "shoulderpress");
+                                    }
+                                }
+                                #endregion 
+
+                                #region row
+                                if (gesture.Name.Equals(this.rowGestureName)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureC, "row");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.rowGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureA, "row");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.rowGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureB, "row");
+                                    }
+                                }
+                                #endregion 
+
+                                #region lunge
+                                if (gesture.Name.Equals(this.lungeGestureName)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureC, "lunge");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.lungeGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureA, "lunge");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.lungeGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureB, "lunge");
+                                    }
+                                }
+                                #endregion 
+
+                                #region frontlift
+                                if (gesture.Name.Equals(this.frontliftGestureName)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureC, "frontlift");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.frontliftGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureA, "frontlift");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.frontliftGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureB, "frontlift");
+                                    }
+                                }
+                                #endregion 
+
+                                #region deadlift
+                                if (gesture.Name.Equals(this.deadliftGestureName)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureC, "deadlift");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.deadliftGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureA, "deadlift");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.deadliftGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureB, "deadlift");
+                                    }
+                                }
+                                #endregion 
+
+                                #region biceps_curl
+                                if (gesture.Name.Equals(this.biceps_curlGestureName)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureC, "biceps_curl");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.biceps_curlGestureName_A)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureA, "biceps_curl");
+                                    }
+                                }
+
+                                if (gesture.Name.Equals(this.biceps_curlGestureName_B)) {
+                                    DiscreteGestureResult result = null;
+                                    discreteResults.TryGetValue(gesture, out result);
+                                    if (result != null) {
+                                        if (result.Confidence > vConfidence)
+                                            this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence, gKind.gestureB, "biceps_curl");
+                                    }
+                                }
+                                #endregion 
+
                             }
                         }
                     }
@@ -271,26 +530,8 @@ namespace KinectStreams {
 
                     if( continuousResults != null ) {
 
-                        foreach ( Gesture gesture in this.vgbFrameSource.Gestures ) {
-                            
-                            //sidelift
-                            /*
-                            if ( gesture.Name.Equals(this.sideliftProgGestureName) && gesture.GestureType == GestureType.Continuous ) {
-                                ContinuousGestureResult result = null;
-                                continuousResults.TryGetValue(gesture, out result);
-
-
-                                if ( result != null ) {
-                                    var progress = result.Progress;
-                                    if(progress > 0.5 && progress < 1 ) {
-                                        this.GestureResultView.UpdateGestureResult(true, true, result.Progress);
-                                    }
-                                    else {
-                                        this.GestureResultView.UpdateGestureResult(true, false, result.Progress);
-                                    }
-                                    //this.GestureResultView.UpdateGestureResult(true, result.Detected, result.Confidence);
-                                }
-                            }*/
+                        foreach ( Gesture gesture in this.vgbFrameSource.Gestures ) {                            
+  
                         }
                     }
 

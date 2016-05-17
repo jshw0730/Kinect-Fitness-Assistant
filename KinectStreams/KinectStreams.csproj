@@ -96,7 +96,6 @@
     <Compile Include="GestureResultView.cs" />
     <Compile Include="KinectJointFilter.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Gesture.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -127,7 +126,22 @@
     <Content Include="Database\gesture_squat.gbd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Database\gestureForTest.gbd">
+    <Content Include="Database\gesture_shoulderpress.gbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Database\gesture_biceps_curl.gbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Database\gesture_deadlift.gbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Database\gesture_frontlift.gbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Database\gesture_lunge.gbd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Database\gesture_row.gbd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Properties\Settings.settings">

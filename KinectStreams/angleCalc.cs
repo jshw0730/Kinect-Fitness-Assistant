@@ -160,11 +160,14 @@ namespace KinectStreams
             joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
             TextBlock textBlock = new TextBlock {
-                FontSize = 20,
+                FontSize = 40,
                 Width = 100,
                 Height = 100,
                 Foreground = new SolidColorBrush(Colors.Red),
-                Text = string2draw
+                FontWeight = FontWeights.UltraBold,
+
+                Text = string2draw,
+               
             };
 
             Canvas.SetLeft(textBlock, joint.X - textBlock.Width / 2);
@@ -184,11 +187,12 @@ namespace KinectStreams
             joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
             TextBlock textBlock = new TextBlock {
-                FontSize = 25,
+                FontSize = 50,
                 Width = 100,
                 Height = 100,
                 Foreground = new SolidColorBrush(Colors.LawnGreen),
-                
+                                FontWeight = FontWeights.UltraBold,
+
                 //Background = new SolidColorBrush(Colors.Black),
                 Text = String2draw.ToString()
 
