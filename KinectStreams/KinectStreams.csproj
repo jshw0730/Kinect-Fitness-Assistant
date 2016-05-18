@@ -91,6 +91,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="angleCalc.cs" />
+    <Compile Include="Draw.cs" />
     <Compile Include="MotionCheck.cs" />
     <Compile Include="GestureDetector.cs" />
     <Compile Include="GestureResultView.cs" />

@@ -25,19 +25,18 @@ namespace KinectStreams {
 
         //gesture - sidelift
         private readonly string gestureDatabase_sidelift = @"Database\gesture_sidelift.gbd";
-            private readonly string sideliftGestureName = "gesture_sidelift";
+            private readonly string sideliftGestureName = "gesture_sideliftC";
             private readonly string sideliftGestureName_A = "gesture_sideliftA";
             private readonly string sideliftGestureName_B = "gesture_sideliftB";
-        //    private readonly string sideliftProgGestureName = "gesture_sideliftProgress";
         
         //gesture - squat
         private readonly string gestureDatabase_squat = @"Database\gesture_squat.gbd";
-            private readonly string squatGestureName = "Squat";
+            private readonly string squatGestureName = "gesture_squatC";
             private readonly string squatGestureName_A = "squatA";
             private readonly string squatGestureName_B = "SquatB";
         //gesture - shoulderpress
         private readonly string gestureDatabase_shoulderpress = @"Database\gesture_shoulderpress.gbd";
-            private readonly string shoulderpressGestureName = "gesture_shoulderpress";
+            private readonly string shoulderpressGestureName = "gesture_shoulderpressC";
             private readonly string shoulderpressGestureName_A = "gesture_shoulderpressA";
             private readonly string shoulderpressGestureName_B = "gesture_shoulderpressB";
         
@@ -74,12 +73,15 @@ namespace KinectStreams {
         /// <summary> Gesture frame reader which will handle gesture events coming from the sensor </summary>
         private VisualGestureBuilderFrameReader vgbFrameReader = null;
 
+        private MultiSourceFrame frameReference = null;
+        private MultiSourceFrameReader frameReader = null;
+
         /// <summary>
         /// Initializes a new instance of the GestureDetector class along with the gesture frame source and reader
         /// </summary>
         /// <param name="kinectSensor">Active sensor to initialize the VisualGestureBuilderFrameSource object with</param>
         /// <param name="gestureResultView">GestureResultView object to store gesture results of a single body to</param>
-        public GestureDetector(KinectSensor kinectSensor, GestureResultView gestureResultView) {
+        public GestureDetector(KinectSensor kinectSensor,  GestureResultView gestureResultView) {
             if ( kinectSensor == null ) {
                 throw new ArgumentNullException("kinectSensor");
             }
@@ -93,7 +95,6 @@ namespace KinectStreams {
             // create the vgb source. The associated body tracking ID will be set when a valid body frame arrives from the sensor.
             this.vgbFrameSource = new VisualGestureBuilderFrameSource(kinectSensor, 0);
             this.vgbFrameSource.TrackingIdLost += this.Source_TrackingIdLost;
-
             // open the reader for the vgb frames
             this.vgbFrameReader = this.vgbFrameSource.OpenReader();
             if ( this.vgbFrameReader != null ) {
@@ -144,6 +145,7 @@ namespace KinectStreams {
                 }
             }
 
+            /*
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_frontlift)) {
                 foreach (Gesture gesture in database.AvailableGestures) {
                     if (gesture.Name.Equals(this.frontliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
@@ -151,6 +153,7 @@ namespace KinectStreams {
                     if (gesture.Name.Equals(this.frontliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
+             */
 
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_deadlift)) {
                 foreach (Gesture gesture in database.AvailableGestures) {
@@ -259,7 +262,7 @@ namespace KinectStreams {
         /// <param name="e">event arguments</param>
         private void Reader_GestureFrameArrived(object sender, VisualGestureBuilderFrameArrivedEventArgs e) {
             VisualGestureBuilderFrameReference frameReference = e.FrameReference;
-            float vConfidence = 0.3f;
+            float vConfidence = 0.5f;
 
             using ( VisualGestureBuilderFrame frame = frameReference.AcquireFrame() ) {
                 if ( frame != null ) {

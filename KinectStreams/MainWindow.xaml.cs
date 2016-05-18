@@ -29,11 +29,20 @@ namespace KinectStreams
 {
 
     static class DisplayTypes {
+        public const int sidelift = 1;
+
+        public const int squat = 2;
+        public const int shoulderpress = 3;
+        public const int row = 4;
+
+        public const int lunge = 5;
+        public const int frontlift = 6;
+        public const int deadlift = 7;
+        public const int biceps_curl = 8;
 
         public const int showDefault = 0;
-        public const int showUpperSide = 1;
-        public const int showDownerSide = 2;
-        public const int showAllSide = 3;
+
+        public const int showAllSide = 100;
     }
 
     static class gKind
@@ -79,7 +88,7 @@ namespace KinectStreams
         bool _displayCoord = false;         //좌표 표시
 
         int countGes = 0; //checking count
-        int timeStamp = 180; //time limit for one Gesture (for count)
+        int timeStamp = 18000; //time limit for one Gesture (for count)
 
         bool visitB = false;    //b방문여부, abC에서 체크
         bool visitC = false;    //C방문여부, abcB 에서 체크
@@ -115,7 +124,7 @@ namespace KinectStreams
                 _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
             }
 
-            GestureResultView result = new GestureResultView(1, false, false, 0.0f, 0, null);
+            GestureResultView result = new GestureResultView(0, false, false, 0.0f, 0, null);
             GestureDetector detector = new GestureDetector(this._sensor, result);
             result.PropertyChanged += GestureResult_PropertyChanged;
             this.gestureDetector = detector;
@@ -139,12 +148,13 @@ namespace KinectStreams
                 return;
             }
 
+
+
             //text display part
             --timeStamp;
             this.Timestamp.Text = timeStamp.ToString();
             if (timeStamp <= 0) {
-                motionChecker.countSetter(cntGesture,
-                                           motionChecker.countGetter(cntGesture) + countGes);
+                motionChecker.countSetter(cntGesture,motionChecker.countGetter(cntGesture) + countGes);
                 countGes = 0;
                 _displayDegree = DisplayTypes.showDefault;
                 this.motioncheckerTF.Text = "";
@@ -210,7 +220,6 @@ namespace KinectStreams
                     if (body != null) {
                         if (body.IsTracked) {
 
-                            RegisterGesture(body);
 
                             // Draw skeleton.
                             if (_displayBody) {
@@ -218,32 +227,16 @@ namespace KinectStreams
                                 _filter.UpdateFilter(body);
                                 _filteredJoints = _filter.GetFilteredJoints();
 
+                                motionChecker.setJoints(_filteredJoints);
 
                                 canvas.DrawSkeleton(_filteredJoints);//, body);
 
-                                //canvas.DrawSkeleton(body);
-                                //Gesture.WaveHand(this.canvas, body);
-                                //Gesture.Swipe(this.canvas, body);
-                                /**********************************/
-
-
+                             
                                 if (_displayCoord) {
                                     canvas.DrawSkeletonCoord(_filteredJoints);
                                 }
 
-                                /*
-                                canvas.DrawIsStraightNeck(_filteredJoints);
-                                canvas.DrawShoulderDegree(_filteredJoints);
-                                canvas.DrawDegreeUpperBody(_filteredJoints);
-                                canvas.DrawIsStraightHand(_filteredJoints);
-
-                                canvas.DrawIsStraightSpine(_filteredJoints);
-
-                                canvas.DrawDegreeDownerBody(_filteredJoints);
-                                canvas.DrawIsStraightAnkle(_filteredJoints);
-                                canvas.DrawLeg2LegWidth(_filteredJoints);
-                                */
-
+                                
 
                                 //have been changed
                                 switch (_displayDegree) {
@@ -251,50 +244,70 @@ namespace KinectStreams
                                     case DisplayTypes.showDefault: { //0
                                             //canvas.DrawIsStraightSpine(_filteredJoints);
                                             break;
-                                        }
+                                    }
 
-                                    case DisplayTypes.showUpperSide: {//1
-                                            //canvas.DrawIsStraightNeck(_filteredJoints);
-                                            //canvas.DrawShoulderDegree(_filteredJoints);
-                                            //canvas.DrawDegreeUpperBody(_filteredJoints);
-                                            //canvas.DrawIsStraightHand(_filteredJoints);
+                                    case DisplayTypes.sidelift: {
+                                            canvas.DrawSideliftInfo(_filteredJoints);
                                             break;
-                                        }
+                                    }
 
-                                    case DisplayTypes.showDownerSide: {//2
-
-                                            //if (jointA.TrackingState == TrackingState.NotTracked || 
-                                            //    jointB.TrackingState == TrackingState.NotTracked || 
-                                            //    jointC.TrackingState == TrackingState.NotTracked) return;
-                                        /*
-                                            canvas.DrawDegreeDownerBody(_filteredJoints);
-                                            canvas.DrawIsStraightAnkle(_filteredJoints);
-                                            canvas.DrawLeg2LegWidth(_filteredJoints);
-                                         */ 
+                                    case DisplayTypes.squat: {//2
+                                            canvas.DrawSquatInfo(_filteredJoints);
                                             break;
-                                        }
-                                    case DisplayTypes.showAllSide: {
-                                        /*
-                                            canvas.DrawDegreeDownerBody(_filteredJoints);
-                                            canvas.DrawIsStraightAnkle(_filteredJoints);
-                                            canvas.DrawLeg2LegWidth(_filteredJoints);
-                                            canvas.DrawIsStraightNeck(_filteredJoints);
-                                            canvas.DrawShoulderDegree(_filteredJoints);
-                                            canvas.DrawDegreeUpperBody(_filteredJoints);
-                                            canvas.DrawIsStraightHand(_filteredJoints);
-                                         */ 
+                                    }
+                                    case DisplayTypes.shoulderpress: {//3
+                                            canvas.DrawShoulderpressInfo(_filteredJoints);
+                                            break;
+                                    }
+                                    case DisplayTypes.row: {//4
+                                            canvas.DrawRowInfo(_filteredJoints);
+                                            break;
+                                    }
+
+
+                                    case DisplayTypes.lunge: {//5
+                                            canvas.DrawLungeInfo(_filteredJoints);
+                                            break;
+                                    }
+                                    case DisplayTypes.frontlift: {//6
+                                            canvas.DrawFrontliftInfo(_filteredJoints);
+                                            break;
+                                    }
+                                    case DisplayTypes.deadlift: {//7
+                                            canvas.DrawDeadliftInfo(_filteredJoints);
+                                            break;
+                                    }
+                                    case DisplayTypes.biceps_curl: {//8
+                                            canvas.DrawBiceps_curlInfo(_filteredJoints);
+                                            break;
+                                    }
+
+
+                                    case DisplayTypes.showAllSide: {//100
+                                            /*
+                                                canvas.DrawDegreeDownerBody(_filteredJoints);
+                                                canvas.DrawIsStraightAnkle(_filteredJoints);
+                                                canvas.DrawLeg2LegWidth(_filteredJoints);
+                                                canvas.DrawIsStraightNeck(_filteredJoints);
+                                                canvas.DrawShoulderDegree(_filteredJoints);
+                                                canvas.DrawDegreeUpperBody(_filteredJoints);
+                                                canvas.DrawIsStraightHand(_filteredJoints);
+                                             */
                                             break;
 
-                                        }
+                                    }
                                     default: {
                                             System.Windows.MessageBox.Show("something's going wrong");
                                             break;
-                                        }
+                                    }
 
                                 }
 
                             }
                         }
+
+
+                        RegisterGesture(body);
                     }
                 }
             }
@@ -327,6 +340,14 @@ namespace KinectStreams
                             break;
                         }
                     case gKind.gestureC: {
+                            CameraSpacePoint[] cntJoints = motionChecker.getJoints();
+                            
+                            //sidelift and shoulderpress classifier
+                            if ( cntJoints != null) {
+                                if (cntJoints[(int)JointType.HandLeft].Y > cntJoints[(int)JointType.Head].Y) {
+                                }
+                            }
+
                             motionChecker.checkSetter(cntGesture, cntGesNum, true); //C on
                             if (motionChecker.checkGetter(cntGesture, gKind.gestureB)) {
                                 visitB = true; //C방문시 앞서 B를 방문했는지 체크함(a->B->C ?)
@@ -404,11 +425,11 @@ namespace KinectStreams
 
 
         private void Coord_Click(object sender, RoutedEventArgs e) {
-
+            timeStamp = 10000;
         }
 
         private void Degree_Click(object sender, RoutedEventArgs e) {
-
+            timeStamp = 1;
 
         }
 

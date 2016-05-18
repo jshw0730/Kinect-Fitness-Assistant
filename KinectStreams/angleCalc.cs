@@ -15,87 +15,22 @@ namespace KinectStreams
 
     public static class angleCalc
     {
-
-        #region DrawingCoord
-
-/****/
-        public static void DrawSkeletonCoord(this Canvas canvas, CameraSpacePoint[] filteredJoints)
-        {
-            //if (body == null) return;
-
-            for (JointType jt = JointType.SpineBase; jt <= JointType.ThumbRight; jt++)
-            {
-                canvas.DrawCoord(filteredJoints[(int)jt]);
-            }
-        }
-
-
-
-/****/
-        public static void DrawCoord(this Canvas canvas, CameraSpacePoint joint)
-        {
-
-            //if (joint.TrackingState == TrackingState.NotTracked) return;
-
-            joint = joint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
-
-
-            float _jointPositionX = joint.X;
-            float _jointPositionY = joint.Y;
-            float _jointPositionZ = joint.Z;
-
-            TextBlock textBlockX = new TextBlock
-            {
-                FontSize = 20,
-                Width = 100,
-                Height = 100,
-                Foreground = new SolidColorBrush(Colors.Red),
-                Text = _jointPositionX.ToString()
-
-            };
-
-
-            TextBlock textBlockY = new TextBlock
-            {
-                FontSize = 20,
-                Width = 100,
-                Height = 60,
-                Foreground = new SolidColorBrush(Colors.Green),
-                Text = _jointPositionY.ToString()
-            };
-
-            TextBlock textBlockZ = new TextBlock
-            {
-                FontSize = 20,
-                Width = 100,
-                Height = 20,
-                Foreground = new SolidColorBrush(Colors.Blue),
-                Text = _jointPositionZ.ToString()
-            };
-
-
-
-            Canvas.SetLeft(textBlockX, joint.X - textBlockX.Width / 2);
-            Canvas.SetTop(textBlockX, joint.Y - textBlockX.Height / 2);
-
-            Canvas.SetLeft(textBlockY, joint.X - textBlockY.Width / 2);
-            Canvas.SetTop(textBlockY, joint.Y - textBlockY.Height / 2);
-
-            Canvas.SetLeft(textBlockZ, joint.X - textBlockZ.Width / 2);
-            Canvas.SetTop(textBlockZ, joint.Y - textBlockZ.Height / 2);
-
-
-            canvas.Children.Add(textBlockX);
-            canvas.Children.Add(textBlockY);
-            canvas.Children.Add(textBlockZ);
-        }
-
-        #endregion DrawingCoord
-
-
         #region Calculation
 
-        public static double CalcP2PDistance( CameraSpacePoint joint1, CameraSpacePoint joint2){
+        public static CameraSpacePoint MiddleJoint(CameraSpacePoint j1, CameraSpacePoint j2) {
+
+            CameraSpacePoint midj;
+
+            midj.X = (j1.X + j2.X) / 2;
+            midj.Y = (j1.Y + j2.Y) / 2;
+            midj.Z = (j1.Z + j2.Z) / 2;
+
+            return midj;
+
+        }
+
+
+        private static double CalcP2PDistance( CameraSpacePoint joint1, CameraSpacePoint joint2){
 
             float _joint1PositionX = joint1.X;
             float _joint1PositionY = joint1.Y;
@@ -111,7 +46,24 @@ namespace KinectStreams
 
         }
 
-        public static double CalcDegreeA(CameraSpacePoint jointA/*drawPoint*/, CameraSpacePoint jointB/*otherP1*/, CameraSpacePoint jointC/*otherP2*/) {
+        private static double CalcDistance(CameraSpacePoint joint1, CameraSpacePoint joint2) {
+
+            float _joint1PositionX = joint1.X;
+            float _joint1PositionY = joint1.Y;
+            float _joint1PositionZ = joint1.Z;
+
+            float _joint2PositionX = joint2.X;
+            float _joint2PositionY = joint2.Y;
+            float _joint2PositionZ = joint2.Z;
+
+            return Math.Sqrt((Math.Pow(_joint1PositionX - _joint2PositionX, 2)
+                            + Math.Pow(_joint1PositionY - _joint2PositionY, 2)
+                            + Math.Pow(_joint1PositionZ - _joint2PositionZ, 2)));
+
+        }
+
+
+        private static double CalcDegreeA(CameraSpacePoint jointA/*drawPoint*/, CameraSpacePoint jointB/*otherP1*/, CameraSpacePoint jointC/*otherP2*/) {
 
             float _joint1PositionX = jointA.X;
             float _joint1PositionY = jointA.Y;
@@ -138,205 +90,106 @@ namespace KinectStreams
             double lengthAB = Math.Sqrt(powedLengthAB);
             double lengthCA = Math.Sqrt(powedLengthCA);
 
-            return (double)(Math.Acos((powedLengthCA + powedLengthAB - powedLengthBC)/ (2 * lengthAB * lengthCA)) * 180/Math.PI);
-        }
-
-        #endregion
-
-        #region Draw string method
-
-        //first parameter for position, second parameter for value(double)
-        public static void DrawString(this Canvas canvas, CameraSpacePoint displayPosJointA/*drawingpart*/, string string2draw, Color strColor)    {
-                        
-            //if (jointA.TrackingState == TrackingState.NotTracked || 
-            //    jointB.TrackingState == TrackingState.NotTracked || 
-            //    jointC.TrackingState == TrackingState.NotTracked) return;
-                
-
-           // float degreeA = CalcDegreeA(jointA, jointB, jointC);
-
-            CameraSpacePoint joint;
-
-            joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
-
-            TextBlock textBlock = new TextBlock {
-                
-                FontSize = 50,
-                Width = 100,
-                Height = 100,
-                Foreground = new SolidColorBrush(strColor),
-                FontWeight = FontWeights.UltraBold,
-
-                Text = string2draw,
-               
-            };
-
-            Canvas.SetLeft(textBlock, joint.X - textBlock.Width / 2);
-            Canvas.SetTop(textBlock, joint.Y - textBlock.Height / 2);
-            
-            canvas.Children.Add(textBlock);
-        }
-
-        public static void DrawString(this Canvas canvas, CameraSpacePoint displayPosJointA/*drawingpart*/, double string2draw, Color strColor) {
-
-            //if (displayPosJointA.TrackingState == TrackingState.NotTracked ) return;
-
-            int String2draw = (int)string2draw;
-            CameraSpacePoint joint;
-
-            joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
-
-            TextBlock textBlock = new TextBlock {
-                FontSize = 50,
-                Width = 100,
-                Height = 100,
-                Foreground = new SolidColorBrush(strColor),
-                                FontWeight = FontWeights.UltraBold,
-
-                //Background = new SolidColorBrush(Colors.Black),
-                Text = String2draw.ToString()
-
-            };
-
-            Canvas.SetLeft(textBlock, joint.X - textBlock.Width / 2);
-            Canvas.SetTop(textBlock, joint.Y - textBlock.Height / 2);
-
-            canvas.Children.Add(textBlock);
+            return (Math.Acos((powedLengthCA + powedLengthAB - powedLengthBC)/ (2 * lengthAB * lengthCA)) * 180/Math.PI);
         }
 
         #endregion
 
 
-        #region Parts
-        //1,2 show elbow angle
-        public static void DrawDegreeUpperBody(this Canvas canvas, CameraSpacePoint[] filteredJoints, Color strColor) {
-            //if (filteredJoints == null) return;
+        #region dgParts
 
-            canvas.DrawString(
-                            filteredJoints[(int)JointType.ElbowLeft],   CalcDegreeA(filteredJoints[(int)JointType.ElbowLeft], 
-                                                                                    filteredJoints[(int)JointType.ShoulderLeft], 
-                                                                                    filteredJoints[(int)JointType.WristLeft]),  strColor );
-            canvas.DrawString(
-                            filteredJoints[(int)JointType.ElbowRight], CalcDegreeA( filteredJoints[(int)JointType.ElbowRight], 
-                                                                                    filteredJoints[(int)JointType.ShoulderRight], 
-                                                                                    filteredJoints[(int)JointType.WristRight]), strColor );
+        //1 Lelbow
+        public static double dgLeftElbow(CameraSpacePoint[] filteredJoints) {
+            return CalcDegreeA(filteredJoints[(int)JointType.ElbowLeft],filteredJoints[(int)JointType.ShoulderLeft],filteredJoints[(int)JointType.WristLeft]);
+        }
+
+        //2 Relbow
+        public static double dgRightElbow(CameraSpacePoint[] filteredJoints) {
+            return CalcDegreeA(filteredJoints[(int)JointType.ElbowRight],filteredJoints[(int)JointType.ShoulderRight],filteredJoints[(int)JointType.WristRight]);
+        }
+
+        //3 Lshoulder
+        public static double dgLeftShoulder(CameraSpacePoint[] filteredJoints) {
+            return CalcDegreeA(filteredJoints[(int)JointType.ShoulderLeft],filteredJoints[(int)JointType.ElbowLeft],filteredJoints[(int)JointType.HipLeft]);
+        }
+
+        //4 Rshoulder
+        public static double dgRightShoulder(CameraSpacePoint[] filteredJoints) {
+            return CalcDegreeA(filteredJoints[(int)JointType.ShoulderRight],filteredJoints[(int)JointType.ElbowRight],filteredJoints[(int)JointType.HipRight]);
+        }
+       
+        //5 Lknee
+        public static double dgLeftKnee(CameraSpacePoint[] filteredJoints) {
+            return CalcDegreeA(filteredJoints[(int)JointType.KneeLeft], filteredJoints[(int)JointType.HipLeft], filteredJoints[(int)JointType.AnkleLeft]);
+        }
+
+        //6 Rknee
+        public static double dgRightKnee(CameraSpacePoint[] filteredJoints) {
+            return CalcDegreeA(filteredJoints[(int)JointType.KneeRight], filteredJoints[(int)JointType.HipRight], filteredJoints[(int)JointType.AnkleRight]);
+        }
+
+        //7 distance of foot
+        public static double dsFoot(CameraSpacePoint[] filteredJoints) {
+            return CalcDistance(filteredJoints[(int)JointType.AnkleLeft],filteredJoints[(int)JointType.AnkleRight]);
+        }
+
+        //7-1 distance of shoulder
+        public static double dsShoulder(CameraSpacePoint[] filteredJoints) {
+            return CalcDistance(filteredJoints[(int)JointType.ShoulderLeft], filteredJoints[(int)JointType.ShoulderRight]);
         }
 
 
-        //3,4 show shoulder angle
-        public static void DrawShoulderDegree(this Canvas canvas, CameraSpacePoint[] filteredJoints, Color strColor) {
-            // if (body == null) return;
-
-            double result1 = CalcDegreeA(filteredJoints[(int)JointType.ShoulderLeft], 
-                                        filteredJoints[(int)JointType.ElbowLeft], 
-                                        filteredJoints[(int)JointType.SpineShoulder]
-                                        );
-            double result2 = CalcDegreeA(filteredJoints[(int)JointType.ShoulderRight], 
-                                        filteredJoints[(int)JointType.ElbowRight], 
-                                        filteredJoints[(int)JointType.SpineShoulder]
-                                        );
 
 
-            //왼손쪽 어꺠 표시
-            if ( result1 - 90.0 <= 0 ) {    //0보다 클경우 그대로 표시
-                canvas.DrawString(filteredJoints[(int)JointType.ShoulderLeft], result1 - 90.0,  strColor); //base angle is gonna be 90(degree)
-            }
-            else {                          //0보다 작으면 0으로 표시
-                canvas.DrawString(filteredJoints[(int)JointType.ShoulderLeft], 0.0 ,            strColor); //base angle is gonna be 90(degree)
-            }
-
-            //오른쪽 어깨표시
-            if ( result2 - 90.0 <= 0 ) {    //0보다 클경우 그대로 표시
-                canvas.DrawString(filteredJoints[(int)JointType.ShoulderRight], result2 - 90.0, strColor);
-            }
-            else {                          //0보다 작으면 0으로 표시한다
-                canvas.DrawString(filteredJoints[(int)JointType.ShoulderRight], 0.0,            strColor);
-            }
-        }
         
-                
-        //5,6 show knee angle
-        public static void DrawDegreeDownerBody(this Canvas canvas, CameraSpacePoint[] filteredJoints, Color strColor) {
-            // if (body == null) return;
-
-            canvas.DrawString( filteredJoints[(int)JointType.KneeLeft],  CalcDegreeA(filteredJoints[(int)JointType.KneeLeft], 
-                                                                                    filteredJoints[(int)JointType.HipLeft], 
-                                                                                    filteredJoints[(int)JointType.AnkleLeft]), strColor);
-            canvas.DrawString( filteredJoints[(int)JointType.KneeRight], CalcDegreeA( filteredJoints[(int)JointType.KneeRight], 
-                                                                                    filteredJoints[(int)JointType.HipRight], 
-                                                                                    filteredJoints[(int)JointType.AnkleRight]), strColor);
+        //8 is Straight Neck
+        public static bool isSraightNeck(CameraSpacePoint[] filteredJoints) {
+            if (CalcDegreeA(filteredJoints[(int)JointType.Neck],filteredJoints[(int)JointType.SpineShoulder],filteredJoints[(int)JointType.Head]) < 165.0) {
+                return false;
+            }
+            return true;
         }
 
-
-        //7 width ankle to ankle
-        public static void DrawLeg2LegWidth(this Canvas canvas, CameraSpacePoint[] filteredJoints, Color strColor) {
-            // if (body == null) return;
-            canvas.DrawString( filteredJoints[(int)JointType.SpineBase], CalcP2PDistance(filteredJoints[(int)JointType.AnkleLeft], 
-                                                                                       filteredJoints[(int)JointType.AnkleRight]), strColor);
-                                  
-
+        //9 is Straight Lwrist
+        public static bool isSraightLeftWrist(CameraSpacePoint[] filteredJoints) {
+            if (CalcDegreeA(filteredJoints[(int)JointType.WristLeft], filteredJoints[(int)JointType.HandLeft], filteredJoints[(int)JointType.ElbowLeft]) < 165.0) {
+                return false;
+            }
+            return true;
         }
 
-
-        //8 is_straight Neck
-        public static void DrawIsStraightNeck(this Canvas canvas, CameraSpacePoint[] filteredJoints, Color strColor) {
-            if(CalcDegreeA(filteredJoints[(int)JointType.Neck],
-                           filteredJoints[(int)JointType.SpineShoulder],
-                           filteredJoints[(int)JointType.Head])            < 165.0 ) {
-                //not straight
-                canvas.DrawString(filteredJoints[(int)JointType.Neck], "not straight", strColor); 
+        //10 is Straight Rwrist
+        public static bool isSraightRightWrist(CameraSpacePoint[] filteredJoints) {
+            if (CalcDegreeA(filteredJoints[(int)JointType.WristRight], filteredJoints[(int)JointType.HandRight], filteredJoints[(int)JointType.ElbowRight]) < 165.0) {
+                return false;
             }
+            return true;
         }
 
-        //9, 10 is_straight Hand
-        public static void DrawIsStraightHand(this Canvas canvas, CameraSpacePoint[] filteredJoints, Color strColor) {
-            if ( CalcDegreeA(filteredJoints[(int)JointType.WristLeft],
-                             filteredJoints[(int)JointType.ElbowLeft],
-                             filteredJoints[(int)JointType.HandLeft]) < 100.0 ) {
-                //not straight
-                canvas.DrawString(filteredJoints[(int)JointType.WristLeft], "not straight" , strColor);
+        //11 is Straight Lankle
+        public static bool isSraightLeftAnkle(CameraSpacePoint[] filteredJoints) {
+            if (CalcDegreeA(filteredJoints[(int)JointType.AnkleLeft], filteredJoints[(int)JointType.KneeLeft], filteredJoints[(int)JointType.FootLeft]) < 165.0) {
+                return false;
             }
-
-            if ( CalcDegreeA(filteredJoints[(int)JointType.WristRight],
-                             filteredJoints[(int)JointType.ElbowRight],
-                             filteredJoints[(int)JointType.HandRight]) < 100.0 ) {
-                //not straight
-                canvas.DrawString(filteredJoints[(int)JointType.WristRight], "not straight" , strColor);
-            }
-        }
-  
-
-        //11, 12 is_straight ankle
-        public static void DrawIsStraightAnkle(this Canvas canvas, CameraSpacePoint[] filteredJoints, Color strColor) {
-
-            double result1 = CalcDegreeA(filteredJoints[(int)JointType.AnkleLeft], 
-                                        filteredJoints[(int)JointType.FootLeft], 
-                                        filteredJoints[(int)JointType.KneeLeft]);
-            double result2 = CalcDegreeA(filteredJoints[(int)JointType.AnkleRight], 
-                                        filteredJoints[(int)JointType.FootRight], 
-                                        filteredJoints[(int)JointType.KneeRight]);
-
-            if ( (result1 > 120.0) || (result1 < 80.0) ) {
-                canvas.DrawString(filteredJoints[(int)JointType.AnkleLeft], "not straight" , strColor); //it is not straight
-            }
-
-            if ( (result2 > 120.0) || (result2 < 80.0) ) {
-                canvas.DrawString(filteredJoints[(int)JointType.AnkleRight], "not straight", strColor);//it is not straight
-            }
+            return true;
         }
 
-   
-        //0 is_straight Spine
-        public static void DrawIsStraightSpine(this Canvas canvas, CameraSpacePoint[] filteredJoints, Color strColor) {
-            if ( CalcDegreeA(filteredJoints[(int)JointType.SpineMid],
-                            filteredJoints[(int)JointType.SpineShoulder],
-                            filteredJoints[(int)JointType.SpineBase]) < 160.0 ) {
-                
-                canvas.DrawString(filteredJoints[(int)JointType.SpineMid], "not straight", strColor); //not straight
+        //12 is Straight Rankle
+        public static bool isSraightRightAnkle(CameraSpacePoint[] filteredJoints) {
+            if (CalcDegreeA(filteredJoints[(int)JointType.AnkleRight], filteredJoints[(int)JointType.KneeRight], filteredJoints[(int)JointType.FootRight]) < 165.0) {
+                return false;
             }
-        }      
+            return true;
+        }
 
-        #endregion DrawingDegree
+        //13 is straight back
+        public static bool isStraightBack(CameraSpacePoint[] filteredJoints) {
+            if (CalcDegreeA(filteredJoints[(int)JointType.SpineMid], filteredJoints[(int)JointType.SpineBase], filteredJoints[(int)JointType.SpineShoulder]) < 150.0) {
+                return false;
+            }
+            return true;
+        }
 
+        #endregion
     }
 }

@@ -23,7 +23,7 @@
         		Background="Yellow"
         		HorizontalAlignment="Left"
         		VerticalAlignment="Top"
-        		Opacity="1.0" Canvas.Left="1334" Canvas.Top="-144" Height="195" Width="589" RenderTransformOrigin="0.5,0.5" Margin="0,42,0,0">
+        		Opacity="1.0" Canvas.Left="1334" Canvas.Top="-144" Height="195" Width="589" RenderTransformOrigin="0.5,0.5" Margin="2,125,0,0">
             <TextBlock.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -39,8 +39,8 @@
                 <Button Content="Depth" Style="{StaticResource ButtonStyle}" Click="Depth_Click" />
                 <Button Content="Infrared" Style="{StaticResource ButtonStyle}" Click="Infrared_Click" />
                 <Button Content="Body" Style="{StaticResource ButtonStyle}" Click="Body_Click" />
-                <Button Content="Coord" Style="{StaticResource ButtonStyle}" Click="Coord_Click" />
-                <Button Content="Degree" Style="{StaticResource ButtonStyle}" Click="Degree_Click" />
+                <Button Content="+time" Style="{StaticResource ButtonStyle}" Click="Coord_Click" />
+                <Button Content="-time" Style="{StaticResource ButtonStyle}" Click="Degree_Click" />
             </StackPanel>
         </Grid>
         <TextBlock x:Name="GestureNotifier"
@@ -50,71 +50,12 @@
         	Background="Yellow"
         	HorizontalAlignment="Left"
         	VerticalAlignment="Top"
-        	Opacity="1.0" Height="94" Width="587" Margin="0,247,0,0"/>
-        <TextBlock x:Name="sideliftmotionA"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,124,141" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="52"/>
-        <TextBlock x:Name="sideliftmotionB"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	VerticalAlignment="Bottom"
-        	Opacity="1.0" Height="50" Margin="0,0,67,141" HorizontalAlignment="Right" Width="52"/>
-        <TextBlock x:Name="sideliftmotionC"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,10,141" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="52"/>
-        <TextBlock x:Name="squatmotionA"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,124,76" HorizontalAlignment="Right" Width="52" Height="50" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="squatmotionB"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	VerticalAlignment="Bottom"
-        	Opacity="1.0" Height="50" Margin="0,0,67,76" HorizontalAlignment="Right" Width="52"/>
-        <TextBlock x:Name="squatmotionC"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,10,76" HorizontalAlignment="Right" Width="52" Height="50" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="shoulderpressmotionA"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	HorizontalAlignment="Right"
-        	Opacity="1.0" Width="52" Margin="0,0,124,12" Height="50" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="shoulderpressmotionB"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	HorizontalAlignment="Right"
-        	Opacity="1.0" Width="52" Margin="0,0,67,12" Height="50" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="shoulderpressmotionC"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	HorizontalAlignment="Right"
-        	Opacity="1.0" Width="52" Margin="0,0,10,12" Height="50" VerticalAlignment="Bottom"/>
+        	Opacity="1.0" Height="94" Width="587" Margin="0,323,0,0"/>
         <TextBlock x:Name="motioncheckerTF"
         	Text="0"
-        	FontSize="30"
+        	FontSize="90"
         	Foreground="Black"
         	Background="Yellow"
-        	Opacity="1.0" Margin="10,0" Height="50" VerticalAlignment="Top"/>
+        	Opacity="1.0" Height="124" VerticalAlignment="Top"/>
     </Grid>
 </Window>

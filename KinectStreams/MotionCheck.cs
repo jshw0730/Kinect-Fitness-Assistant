@@ -3,11 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Kinect;
 
 namespace KinectStreams {
     class MotionCheck
     {
-
+        private CameraSpacePoint[] joints = null;
+        public void setJoints(CameraSpacePoint[] _joints){
+            this.joints = _joints;
+        }
+        public CameraSpacePoint[] getJoints() {
+            return this.joints;
+        }
 
         #region count-fields
 
@@ -181,14 +188,16 @@ namespace KinectStreams {
 
         #region show-fields
 
-        private int showInfoSidelift = DisplayTypes.showUpperSide;
-        private int showInfoSquat = DisplayTypes.showAllSide;
-        private int showInfoShoulderpress = DisplayTypes.showUpperSide;
-        private int showInfoRow = DisplayTypes.showUpperSide;
-        private int showInfoLunge = DisplayTypes.showDownerSide;
-        private int showInfoFrontlift = DisplayTypes.showUpperSide;
-        private int showInfoDeadlift = DisplayTypes.showAllSide;
-        private int showInfoBiceps_curl = DisplayTypes.showUpperSide;
+        private int showInfoSidelift = DisplayTypes.sidelift;
+        private int showInfoSquat = DisplayTypes.squat;
+        private int showInfoShoulderpress = DisplayTypes.shoulderpress;
+        private int showInfoRow = DisplayTypes.row;
+
+        private int showInfoLunge = DisplayTypes.lunge;
+        private int showInfoFrontlift = DisplayTypes.frontlift;
+        private int showInfoDeadlift = DisplayTypes.deadlift;
+        private int showInfoBiceps_curl = DisplayTypes.biceps_curl;
+
         private int showInfoSomethingWrong = DisplayTypes.showDefault;
 
         #endregion
