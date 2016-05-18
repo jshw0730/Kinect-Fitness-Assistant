@@ -42,40 +42,6 @@ namespace KinectStreams
         public const int gestureB = 1;
         public const int gestureC = 2;
         public const int gesture = 2;
-
-        /*
-        public const int sideliftA = 1;
-        public const int sideliftB = 2;
-        public const int sidelift = 3;
-
-        public const int squatA = 4;
-        public const int squatB = 5;
-        public const int squat = 6;
-
-        public const int shoulderpressA = 7;
-        public const int shoulderpressB = 8;
-        public const int shoulderpress = 9;
-
-        public const int rowA = 10;
-        public const int rowB = 11;
-        public const int row = 12;
-
-        public const int lungeA = 13;
-        public const int lungeB = 14;
-        public const int lunge = 15;
-
-        public const int frontliftA = 16;
-        public const int frontliftB = 17;
-        public const int frontlift = 18;
-
-        public const int deadliftA = 19;
-        public const int deadliftB = 20;
-        public const int deadlift = 21;
-
-        public const int biceps_curlA = 22;
-        public const int biceps_curlB = 23;
-        public const int biceps_curl = 24;
-        */ 
     }
 
     public partial class MainWindow : Window
@@ -83,9 +49,9 @@ namespace KinectStreams
 
         #region gesture_fields
 
-        private List<GestureDetector> gestureDetectorList = null;
+        //private List<GestureDetector> gestureDetectorList = null;
         private GestureDetector gestureDetector = null;
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
@@ -98,13 +64,12 @@ namespace KinectStreams
             Infrared
         }
 
-
         Mode _mode = Mode.Depth;    //시작모드 [color,depth,infrared]
 
         KinectSensor _sensor;   //센서
         MultiSourceFrameReader _reader; //프레임리더 
-        IList<Body> _bodies;    //6개 바디 저장하는 리스트
-        Body[] bodiesArray;
+        //IList<Body> _bodies;    //6개 바디 저장하는 리스트
+        //Body[] bodiesArray;
 
         KinectJointFilter _filter = new KinectJointFilter();    //노이즈 잡는 필터
         CameraSpacePoint[] _filteredJoints;                     //필터에 들어갔다온 joint
@@ -126,7 +91,7 @@ namespace KinectStreams
         MotionCheck motionChecker = new MotionCheck();  //모션체커, 1회운동 판단에 사용
 
 
-        public static int _displayDegree = DisplayTypes.showDefault;   //현 화면에 보여줄 세팅
+        public static int _displayDegree = DisplayTypes.showAllSide;//DisplayTypes.showDefault;   //현 화면에 보여줄 세팅
 
         #endregion
 
@@ -150,24 +115,10 @@ namespace KinectStreams
                 _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
             }
 
-
-            ///adding event
-            // Initialize the gesture detection objects for our gestures
-            
-            //this.gestureDetectorList = new List<GestureDetector>();
-
-            
-
-            // Create a gesture detector for each body (6 bodies => 6 detectors)
-            //int maxBodies = _sensor.BodyFrameSource.BodyCount;
-            //for (int i = 0; i < maxBodies; ++i) {
-                GestureResultView result = new GestureResultView(1, false, false, 0.0f, 0, null);
-                GestureDetector detector = new GestureDetector(this._sensor, result);
-                result.PropertyChanged += GestureResult_PropertyChanged;
-                //this.gestureDetectorList.Add(detector);
-                this.gestureDetector = detector;
-            //}
-
+            GestureResultView result = new GestureResultView(1, false, false, 0.0f, 0, null);
+            GestureDetector detector = new GestureDetector(this._sensor, result);
+            result.PropertyChanged += GestureResult_PropertyChanged;
+            this.gestureDetector = detector;
         }
 
         private void Window_Closed(object sender, EventArgs e) {
@@ -182,13 +133,11 @@ namespace KinectStreams
 
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e) {
             var reference = e.FrameReference.AcquireFrame();
-
-
+            
             // If the Frame has expired by the time we process this event, return.
             if (reference == null) {
                 return;
             }
-
 
             //text display part
             --timeStamp;
@@ -202,8 +151,6 @@ namespace KinectStreams
                 b4Gesture = "any";
             }
             this.count.Text = "count : " + countGes.ToString();
-
-
 
             // Color
             using (var frame = reference.ColorFrameReference.AcquireFrame()) {
@@ -227,40 +174,18 @@ namespace KinectStreams
             // Body       
             using (var frame = reference.BodyFrameReference.AcquireFrame()) {
 
-                int activeBodyIndex = -1; // Default to impossible value.
+                int activeBodyIndex = -1; // Default to impossible value.        
                 
-
-
                 if (frame != null) {
-
                     canvas.Children.Clear();
 
                     int bodycounts = frame.BodyFrameSource.BodyCount;
-                    //_bodies = new Body[bodycounts];
-                     Body[] bodiesArray = new Body[bodycounts];
+                    Body[] bodiesArray = new Body[bodycounts];
                     frame.GetAndRefreshBodyData(bodiesArray);
 
                     Body body = null;
 
-                    /*
-                     * 
-                     * 현재 문제인점.
-                     * foreach를 갈아야한다. 
-                     * 이걸 갈아서 하나의 body에 대해서만 값을 보도록 설정해야함.
-                     * 이 작업을 하면 하나의 body에 대해서만 작업을 하도록 만들 수 있고, 
-                     * 또한 모든 body에 대해서 작업하지 않으므로 작업량 자체가 줄어들게 된다.
-                     * 물론 실질적인 작업량은 크게 줄지 않고 (화면에 대한 표시만 안하게 되므로...)
-                     * 겉보기에만 덜 작업하는 것으로 판별될 것.
-                     * 가장 큰 문제는 표기는 하나로 되는데 제스쳐는 따로 인식하는 경우인데, 이때는 진짜 답이없다. 시발.
-                    */
-
-                    /****Closest person gets control*****/
-                    //
-
-                    // Iterate through all bodies, 
-                    // no point persisting activeBodyIndex because must 
-                    // compare with depth of all bodies so no gain in efficiency.
-
+                    //for now , closest person first
                     float minZPoint = float.MaxValue; // Default to impossible value
                     for (int i = 0; i < bodiesArray.Length; i++) {
                         body = bodiesArray[i];
@@ -274,9 +199,7 @@ namespace KinectStreams
                         }
                     }
 
-
-                    // If active body is still active after checking and 
-                    // updating, use it
+                    // If active body is still active after checking and updating, use it
                     if (activeBodyIndex != -1) {
                         body = bodiesArray[activeBodyIndex];
                         // Do stuff with known active body.
@@ -326,15 +249,15 @@ namespace KinectStreams
                                 switch (_displayDegree) {
 
                                     case DisplayTypes.showDefault: { //0
-                                            canvas.DrawIsStraightSpine(_filteredJoints);
+                                            //canvas.DrawIsStraightSpine(_filteredJoints);
                                             break;
                                         }
 
                                     case DisplayTypes.showUpperSide: {//1
-                                            canvas.DrawIsStraightNeck(_filteredJoints);
-                                            canvas.DrawShoulderDegree(_filteredJoints);
-                                            canvas.DrawDegreeUpperBody(_filteredJoints);
-                                            canvas.DrawIsStraightHand(_filteredJoints);
+                                            //canvas.DrawIsStraightNeck(_filteredJoints);
+                                            //canvas.DrawShoulderDegree(_filteredJoints);
+                                            //canvas.DrawDegreeUpperBody(_filteredJoints);
+                                            //canvas.DrawIsStraightHand(_filteredJoints);
                                             break;
                                         }
 
@@ -343,13 +266,15 @@ namespace KinectStreams
                                             //if (jointA.TrackingState == TrackingState.NotTracked || 
                                             //    jointB.TrackingState == TrackingState.NotTracked || 
                                             //    jointC.TrackingState == TrackingState.NotTracked) return;
-
+                                        /*
                                             canvas.DrawDegreeDownerBody(_filteredJoints);
                                             canvas.DrawIsStraightAnkle(_filteredJoints);
                                             canvas.DrawLeg2LegWidth(_filteredJoints);
+                                         */ 
                                             break;
                                         }
                                     case DisplayTypes.showAllSide: {
+                                        /*
                                             canvas.DrawDegreeDownerBody(_filteredJoints);
                                             canvas.DrawIsStraightAnkle(_filteredJoints);
                                             canvas.DrawLeg2LegWidth(_filteredJoints);
@@ -357,6 +282,7 @@ namespace KinectStreams
                                             canvas.DrawShoulderDegree(_filteredJoints);
                                             canvas.DrawDegreeUpperBody(_filteredJoints);
                                             canvas.DrawIsStraightHand(_filteredJoints);
+                                         */ 
                                             break;
 
                                         }
@@ -372,15 +298,6 @@ namespace KinectStreams
                     }
                 }
             }
-            //}
-
-
-            /*
-            ////////added for gesture
-            using (var bodyFrame = reference.BodyFrameReference.AcquireFrame()) {
-                RegisterGesture(bodyFrame);
-            }
-            */
 
         }//end_method
 
@@ -455,12 +372,12 @@ namespace KinectStreams
 
             if (motionChecker.checkMotionEnd) {
                 motionChecker.checkMotionEnd = false;
-                this.motioncheckerTF.Text += " ";
 
                 motionChecker.initializeChecker();
 
-
                 ++countGes;
+
+                this.motioncheckerTF.Text += " ";
 
             } //if time is not over, then go up for count
 
@@ -487,140 +404,29 @@ namespace KinectStreams
 
 
         private void Coord_Click(object sender, RoutedEventArgs e) {
-            /*
-            if (_displayBody == true) {
-                if (_displayDegree == true) {
-                    _displayDegree = !_displayDegree;
-                    _displayCoord = !_displayCoord;
-                }
-                else { _displayCoord = !_displayCoord; }
-            }
-            */
 
-            //_displayDegree = DisplayTypes.showDownerSide;
         }
 
         private void Degree_Click(object sender, RoutedEventArgs e) {
-            /*
-            if (_displayBody == true) {
-                if (_displayCoord == true) {
-                    _displayCoord = !_displayCoord;
-                    _displayDegree = !_displayDegree;
-                }
-                else { _displayDegree = !_displayDegree; }
-            }
-            */
-            //_displayDegree = DisplayTypes.showUpperSide;
+
 
         }
 
         #endregion
 
         private void RegisterGesture(Body body) {
-            /*
-            bool dataReceived = false;
-            Body[] bodies = null;
 
-            if (bodyFrame != null) {
-                if (bodies == null) {
-                    // Creates an array of 6 bodies, which is the max 
-                    // number of bodies the Kinect can track simultaneously
-                    bodies = new Body[bodyFrame.BodyCount];
-                }
-
-                // The first time GetAndRefreshBodyData is called, 
-                // allocate each Body in the array.
-                // As long as those body objects are not disposed and 
-                // not set to null in the array,
-                // those body objects will be re-used.
-                bodyFrame.GetAndRefreshBodyData(bodies);
-                dataReceived = true;
-            }
-            */
             if (body != null) {
-                // We may have lost/acquired bodies, 
-                // so update the corresponding gesture detectors
-                // if (bodies != null) {
-                // Loop through all bodies to see if any 
-                // of the gesture detectors need to be updated
-                // for (int i = 0; i < bodyFrame.BodyCount; ++i) {
-                //    Body body = bodies[i];
+             
                 ulong trackingId = body.TrackingId;
-
-                // If the current body TrackingId changed, 
-                // update the corresponding gesture detector with 
-                // the new value
 
                 if (trackingId != this.gestureDetector.TrackingId) {
                     this.gestureDetector.TrackingId = trackingId;
-
-                    // If the current body is tracked, unpause its 
-                    // detector to get 
-                    // VisualGestureBuilderFrameArrived events
-                    // If the current body is NOT tracked, pause its
-                    // detector so we don't waste resources trying to get 
-                    // invalid gesture results
                     this.gestureDetector.IsPaused = trackingId == 0;
                 }
-
             }
         }
 
-        /*
-        private void RegisterGesture(BodyFrame bodyFrame) {
-            
-            bool dataReceived = false;
-            Body[] bodies = null;
-
-            if (bodyFrame != null) {
-                if (bodies == null) {
-                    // Creates an array of 6 bodies, which is the max 
-                    // number of bodies the Kinect can track simultaneously
-                    bodies = new Body[bodyFrame.BodyCount];
-                }
-
-                // The first time GetAndRefreshBodyData is called, 
-                // allocate each Body in the array.
-                // As long as those body objects are not disposed and 
-                // not set to null in the array,
-                // those body objects will be re-used.
-                bodyFrame.GetAndRefreshBodyData(bodies);
-                dataReceived = true;
-            }
-
-            if (dataReceived) {
-                // We may have lost/acquired bodies, 
-                // so update the corresponding gesture detectors
-                if (bodies != null) {
-                    // Loop through all bodies to see if any 
-                    // of the gesture detectors need to be updated
-                    for (int i = 0; i < bodyFrame.BodyCount; ++i) {
-                        Body body = bodies[i];
-                        ulong trackingId = body.TrackingId;
-
-                        // If the current body TrackingId changed, 
-                        // update the corresponding gesture detector with 
-                        // the new value
-
-
-                        if (trackingId != this.gestureDetectorList[i].TrackingId) {
-                            this.gestureDetectorList[i].TrackingId = trackingId;
-
-                            // If the current body is tracked, unpause its 
-                            // detector to get 
-                            // VisualGestureBuilderFrameArrived events
-                            // If the current body is NOT tracked, pause its
-                            // detector so we don't waste resources trying to get 
-                            // invalid gesture results
-                            this.gestureDetectorList[i].IsPaused =
-                                 trackingId == 0;
-                        }
-
-                    }
-                }
-            }
-        }
-        */
     }
 
 }
