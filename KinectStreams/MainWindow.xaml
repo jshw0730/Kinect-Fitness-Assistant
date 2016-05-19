@@ -1,29 +1,45 @@
-﻿<Window x:Class="KinectStreams.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        
-        Title="Kinect | Fitness Assistant " Height="480" Width="1000" Loaded="Window_Loaded" Closed="Window_Closed">
+         
+        xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" x:Class="KinectStreams.MainWindow"
+         
+        Title="Kinect | Fitness Assistant " Height="1080" Width="1280" Loaded="Window_Loaded" Closed="Window_Closed" WindowStartupLocation="CenterOwner">
     <Grid>
-        <Image Name="camera" Margin="0,0,-0.4,0.4" />
-        <Canvas Name="canvas" Margin="-10,50,9.6,10.4" >
+        <Image x:Name="camera" Margin="0,0,-0.4,0.4" />
+        <Canvas x:Name="canvas" Margin="-10,50,9.6,10.4" >
+
+            <Custom:Tile x:Name="button1" Content="back" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Height="171" Width="329" Background="White" FontFamily="MD_Itgirl" FontSize="120" Click="button1_Click" Canvas.Left="14" Canvas.Top="777" RenderTransformOrigin="0.5,0.5">
+                <Custom:Tile.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleY="-0.637"/>
+                        <RotateTransform/>
+                        <TranslateTransform Y="-1.568"/>
+                    </TransformGroup>
+                </Custom:Tile.RenderTransform>
+            </Custom:Tile>
+            <Grid Height="274" Canvas.Left="783" Canvas.Top="672" Width="315" Background="#FFF3E5E5">
+                <Label x:Name="label" Content="skeleton" Foreground="Black" FontSize="70" Margin="16,25,-24,0" VerticalAlignment="Top" RenderTransformOrigin="0.144,-0.109"/>
+            </Grid>
 
         </Canvas>
         <TextBlock x:Name="Timestamp"
-        		Text="0"
-        		FontSize="30"
-        		Foreground="Black"
-        		Background="Yellow"
-        		HorizontalAlignment="Left"
-        		VerticalAlignment="Top"
-        		Opacity="1.0" Height="50" Width="123" Canvas.Left="83" Canvas.Top="-33" Margin="859,74,0,0"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Opacity="1.0" Height="50" Width="123" Canvas.Left="83" Canvas.Top="-33" Margin="859,74,0,0"/>
         <TextBlock x:Name="count"
-        		Text="count : 0"
-        		FontSize="120"
-        		Foreground="Black"
-        		Background="Yellow"
-        		HorizontalAlignment="Left"
-        		VerticalAlignment="Top"
-        		Opacity="1.0" Canvas.Left="1334" Canvas.Top="-144" Height="195" Width="589" RenderTransformOrigin="0.5,0.5" Margin="0,42,0,0">
+			Text="count : 0"
+			FontSize="120"
+			Foreground="Black"
+			Background="Yellow"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Opacity="1.0" Canvas.Left="1334" Canvas.Top="-144" Height="195" Width="589" RenderTransformOrigin="0.5,0.5" Margin="0,42,0,0">
             <TextBlock.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -44,77 +60,77 @@
             </StackPanel>
         </Grid>
         <TextBlock x:Name="GestureNotifier"
-        	Text="0"
-        	FontSize="70"
-        	Foreground="Black"
-        	Background="Yellow"
-        	HorizontalAlignment="Left"
-        	VerticalAlignment="Top"
-        	Opacity="1.0" Height="94" Width="587" Margin="0,247,0,0"/>
+			Text="0"
+			FontSize="70"
+			Foreground="Black"
+			Background="Yellow"
+			HorizontalAlignment="Left"
+			VerticalAlignment="Top"
+			Opacity="1.0" Height="94" Width="587" Margin="0,247,0,0"/>
         <TextBlock x:Name="sideliftmotionA"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,124,141" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="52"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			Opacity="1.0" Margin="0,0,124,141" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="52"/>
         <TextBlock x:Name="sideliftmotionB"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	VerticalAlignment="Bottom"
-        	Opacity="1.0" Height="50" Margin="0,0,67,141" HorizontalAlignment="Right" Width="52"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			VerticalAlignment="Bottom"
+			Opacity="1.0" Height="50" Margin="0,0,67,141" HorizontalAlignment="Right" Width="52"/>
         <TextBlock x:Name="sideliftmotionC"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,10,141" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="52"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			Opacity="1.0" Margin="0,0,10,141" Height="50" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="52"/>
         <TextBlock x:Name="squatmotionA"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,124,76" HorizontalAlignment="Right" Width="52" Height="50" VerticalAlignment="Bottom"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			Opacity="1.0" Margin="0,0,124,76" HorizontalAlignment="Right" Width="52" Height="50" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="squatmotionB"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	VerticalAlignment="Bottom"
-        	Opacity="1.0" Height="50" Margin="0,0,67,76" HorizontalAlignment="Right" Width="52"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			VerticalAlignment="Bottom"
+			Opacity="1.0" Height="50" Margin="0,0,67,76" HorizontalAlignment="Right" Width="52"/>
         <TextBlock x:Name="squatmotionC"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,10,76" HorizontalAlignment="Right" Width="52" Height="50" VerticalAlignment="Bottom"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			Opacity="1.0" Margin="0,0,10,76" HorizontalAlignment="Right" Width="52" Height="50" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="shoulderpressmotionA"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	HorizontalAlignment="Right"
-        	Opacity="1.0" Width="52" Margin="0,0,124,12" Height="50" VerticalAlignment="Bottom"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			HorizontalAlignment="Right"
+			Opacity="1.0" Width="52" Margin="0,0,124,12" Height="50" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="shoulderpressmotionB"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	HorizontalAlignment="Right"
-        	Opacity="1.0" Width="52" Margin="0,0,67,12" Height="50" VerticalAlignment="Bottom"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			HorizontalAlignment="Right"
+			Opacity="1.0" Width="52" Margin="0,0,67,12" Height="50" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="shoulderpressmotionC"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	HorizontalAlignment="Right"
-        	Opacity="1.0" Width="52" Margin="0,0,10,12" Height="50" VerticalAlignment="Bottom"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			HorizontalAlignment="Right"
+			Opacity="1.0" Width="52" Margin="0,0,10,12" Height="50" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="motioncheckerTF"
-        	Text="0"
-        	FontSize="30"
-        	Foreground="Black"
-        	Background="Yellow"
-        	Opacity="1.0" Margin="10,0" Height="50" VerticalAlignment="Top"/>
+			Text="0"
+			FontSize="30"
+			Foreground="Black"
+			Background="Yellow"
+			Opacity="1.0" Margin="10,0" Height="50" VerticalAlignment="Top"/>
     </Grid>
 </Window>
