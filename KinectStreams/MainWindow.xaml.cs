@@ -566,6 +566,14 @@ namespace KinectStreams
             }
         }
 
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            start start = new start();
+            start.Show();
+            this.Owner = start;
+        }
+
         /*
         private void RegisterGesture(BodyFrame bodyFrame) {
             
