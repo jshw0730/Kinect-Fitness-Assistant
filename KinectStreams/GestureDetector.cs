@@ -104,7 +104,7 @@ namespace KinectStreams {
 
 
             #region load the gesture from the gesture database
-
+            
             using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_sidelift) ) {
                 foreach ( Gesture gesture in database.AvailableGestures ) {
                     if ( gesture.Name.Equals(this.sideliftGestureName) )   { this.vgbFrameSource.AddGesture(gesture); }
@@ -112,6 +112,7 @@ namespace KinectStreams {
                     if ( gesture.Name.Equals(this.sideliftGestureName_B) ) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
+            
 
             using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_squat) ) {
                 foreach ( Gesture gesture in database.AvailableGestures ) {
@@ -128,7 +129,8 @@ namespace KinectStreams {
                     if (gesture.Name.Equals(this.shoulderpressGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
-
+            
+            
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_row)) {
                 foreach (Gesture gesture in database.AvailableGestures) {
                     if (gesture.Name.Equals(this.rowGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
@@ -136,7 +138,6 @@ namespace KinectStreams {
                     if (gesture.Name.Equals(this.rowGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
-
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_lunge)) {
                 foreach (Gesture gesture in database.AvailableGestures) {
                     if (gesture.Name.Equals(this.lungeGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
@@ -144,7 +145,7 @@ namespace KinectStreams {
                     if (gesture.Name.Equals(this.lungeGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
-
+            
             /*
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_frontlift)) {
                 foreach (Gesture gesture in database.AvailableGestures) {

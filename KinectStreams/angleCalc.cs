@@ -144,7 +144,10 @@ namespace KinectStreams
         
         //8 is Straight Neck
         public static bool isSraightNeck(CameraSpacePoint[] filteredJoints) {
-            if (CalcDegreeA(filteredJoints[(int)JointType.Neck],filteredJoints[(int)JointType.SpineShoulder],filteredJoints[(int)JointType.Head]) < 165.0) {
+            if ((CalcDegreeA(filteredJoints[(int)JointType.Neck],filteredJoints[(int)JointType.SpineShoulder],filteredJoints[(int)JointType.Head]) < 140.0)
+                || (filteredJoints[(int)JointType.Neck].Y *1.1 < filteredJoints[(int)JointType.Head].Y) 
+                || (filteredJoints[(int)JointType.Neck].Y *0.9 > filteredJoints[(int)JointType.Head].Y)) 
+            {
                 return false;
             }
             return true;

@@ -89,6 +89,7 @@ namespace KinectStreams
 
         int countGes = 0; //checking count
         int timeStamp = 18000; //time limit for one Gesture (for count)
+        int motionInterval = 30;
 
         bool visitB = false;    //b방문여부, abC에서 체크
         bool visitC = false;    //C방문여부, abcB 에서 체크
@@ -152,7 +153,9 @@ namespace KinectStreams
 
             //text display part
             --timeStamp;
+            --motionInterval;
             this.Timestamp.Text = timeStamp.ToString();
+            this.motionTimer.Text = motionInterval.ToString();
             if (timeStamp <= 0) {
                 motionChecker.countSetter(cntGesture,motionChecker.countGetter(cntGesture) + countGes);
                 countGes = 0;
@@ -340,14 +343,18 @@ namespace KinectStreams
                             break;
                         }
                     case gKind.gestureC: {
-                            CameraSpacePoint[] cntJoints = motionChecker.getJoints();
+                        /*    
+                        CameraSpacePoint[] cntJoints = motionChecker.getJoints();
                             
                             //sidelift and shoulderpress classifier
                             if ( cntJoints != null) {
                                 if (cntJoints[(int)JointType.HandLeft].Y > cntJoints[(int)JointType.Head].Y) {
+                                    //손이 머리위로 가는 경우는 숄더프레스의 C동작밖에 없다. 
+                                    //따라서 이 안에 사이드리프트와 별도로 잡는 로직을 투입한다.
+                                    //
                                 }
                             }
-
+                        */
                             motionChecker.checkSetter(cntGesture, cntGesNum, true); //C on
                             if (motionChecker.checkGetter(cntGesture, gKind.gestureB)) {
                                 visitB = true; //C방문시 앞서 B를 방문했는지 체크함(a->B->C ?)
@@ -362,26 +369,30 @@ namespace KinectStreams
                               && motionChecker.checkGetter(cntGesture, gKind.gestureC)
                               && visitB
                               && visitC
+                              && (motionInterval<0)
                              ) {      // (a-B-C-B-A ?)
 
                                 //it's end of one motion
                                 motionChecker.initializeChecker();          //initializing checkers to false
+                                visitB = false;
+                                visitC = false;
 
-                                this.motioncheckerTF.Text += cntGesture; //for debug, display current gesture
+                                this.motioncheckerTF.Text = cntGesture; //for debug, display current gesture
 
                                 b4Gesture = cntGesture; //save current ges for lock
 
                                 motionChecker.checkMotionEnd = true;        //운동동작 하나 완성 
 
+
                                 _displayDegree = motionChecker.showInfoGetter(cntGesture);  //해당 운동에 맞는 정보 표시
                                 timeStamp = 180; //reset timestamp 
+                                motionInterval = 45;
                             }
 
                             //initializing part
-                            motionChecker.initializeChecker();
-                            visitB = false;
-                            visitC = false;
-
+                            //motionChecker.initializeChecker();
+                            //visitB = false;
+                            //visitC = false;
                             motionChecker.checkSetter(cntGesture, cntGesNum, true); //A on
                             break;
                         }
