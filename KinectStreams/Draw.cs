@@ -91,9 +91,9 @@ namespace KinectStreams
         //first parameter for position, second parameter for value(double)
         public static void DrawString(this Canvas canvas, CameraSpacePoint displayPosJointA/*drawingpart*/, string string2draw, Color strColor) {
 
-            CameraSpacePoint joint;
+            //CameraSpacePoint joint;
 
-            joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
+            //joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
             TextBlock textBlock = new TextBlock {
 
@@ -106,8 +106,8 @@ namespace KinectStreams
 
             };
 
-            Canvas.SetLeft(textBlock, joint.X - textBlock.Width / 2);
-            Canvas.SetTop(textBlock, joint.Y - textBlock.Height / 2);
+            Canvas.SetLeft(textBlock, displayPosJointA.X - textBlock.Width / 2);
+            Canvas.SetTop(textBlock, displayPosJointA.Y - textBlock.Height / 2);
 
             canvas.Children.Add(textBlock);
         }
@@ -115,9 +115,9 @@ namespace KinectStreams
         public static void DrawString(this Canvas canvas, CameraSpacePoint displayPosJointA/*drawingpart*/, double string2draw, Color strColor) {
 
             int String2draw = (int)string2draw;
-            CameraSpacePoint joint;
+            //CameraSpacePoint joint;
 
-            joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
+            //joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
             TextBlock textBlock = new TextBlock {
                 FontSize = 80,
@@ -129,8 +129,8 @@ namespace KinectStreams
 
             };
 
-            Canvas.SetLeft(textBlock, joint.X - textBlock.Width / 2);
-            Canvas.SetTop(textBlock, joint.Y - textBlock.Height / 2);
+            Canvas.SetLeft(textBlock, displayPosJointA.X - textBlock.Width / 2);
+            Canvas.SetTop(textBlock, displayPosJointA.Y - textBlock.Height / 2);
 
             canvas.Children.Add(textBlock);
         }

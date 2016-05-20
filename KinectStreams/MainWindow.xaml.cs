@@ -28,9 +28,8 @@ using global::Windows.Graphics.Imaging;
 namespace KinectStreams
 {
 
-    static class DisplayTypes {
+    static class GestureTypes {
         public const int sidelift = 1;
-
         public const int squat = 2;
         public const int shoulderpress = 3;
         public const int row = 4;
@@ -53,13 +52,15 @@ namespace KinectStreams
         public const int gesture = 2;
     }
 
+
     public partial class MainWindow : Window
     {
 
         #region gesture_fields
 
         //private List<GestureDetector> gestureDetectorList = null;
-        private GestureDetector gestureDetector = null;
+        private GestureDetector[] gestureDetector = new GestureDetector[8];
+       
         //public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
@@ -101,7 +102,7 @@ namespace KinectStreams
         MotionCheck motionChecker = new MotionCheck();  //모션체커, 1회운동 판단에 사용
 
 
-        public static int _displayDegree = DisplayTypes.showAllSide;//DisplayTypes.showDefault;   //현 화면에 보여줄 세팅
+        public static int _displayDegree = GestureTypes.showAllSide;//GestureTypes.showDefault;   //현 화면에 보여줄 세팅
 
         #endregion
 
@@ -125,10 +126,22 @@ namespace KinectStreams
                 _reader.MultiSourceFrameArrived += Reader_MultiSourceFrameArrived;
             }
 
-            GestureResultView result = new GestureResultView(0, false, false, 0.0f, 0, null);
-            GestureDetector detector = new GestureDetector(this._sensor, result);
-            result.PropertyChanged += GestureResult_PropertyChanged;
-            this.gestureDetector = detector;
+            GestureResultView[] result;
+            result = new GestureResultView[8];
+
+            GestureDetector[] detector;
+            detector = new GestureDetector[8];
+
+            for(int i =0; i<8 ; i++){
+                result[i] = new GestureResultView(0,false,false,0.0f,0,null);
+                detector[i] = new GestureDetector(this._sensor, result[i], i+1);
+            }
+
+            for (int i = 0; i < 8; i++) {
+                result[i].PropertyChanged += GestureResult_PropertyChanged;
+                this.gestureDetector[i] = detector[i];
+            }
+
         }
 
         private void Window_Closed(object sender, EventArgs e) {
@@ -159,7 +172,7 @@ namespace KinectStreams
             if (timeStamp <= 0) {
                 motionChecker.countSetter(cntGesture,motionChecker.countGetter(cntGesture) + countGes);
                 countGes = 0;
-                _displayDegree = DisplayTypes.showDefault;
+                _displayDegree = GestureTypes.showDefault;
                 this.motioncheckerTF.Text = "";
                 b4Gesture = "any";
             }
@@ -275,48 +288,49 @@ namespace KinectStreams
                                 //have been changed
                                 switch (_displayDegree) {
 
-                                    case DisplayTypes.showDefault: { //0
+                                    case GestureTypes.showDefault: { //0
                                             //canvas.DrawIsStraightSpine(_filteredJoints);
                                             break;
                                     }
 
-                                    case DisplayTypes.sidelift: {
+
+                                    case GestureTypes.sidelift: {
                                             canvas.DrawSideliftInfo(_filteredJoints);
                                             break;
                                     }
-
-                                    case DisplayTypes.squat: {//2
+                                    case GestureTypes.squat: {//2
                                             canvas.DrawSquatInfo(_filteredJoints);
                                             break;
                                     }
-                                    case DisplayTypes.shoulderpress: {//3
+                                    case GestureTypes.shoulderpress: {//3
                                             canvas.DrawShoulderpressInfo(_filteredJoints);
                                             break;
                                     }
-                                    case DisplayTypes.row: {//4
+                                    case GestureTypes.row: {//4
                                             canvas.DrawRowInfo(_filteredJoints);
                                             break;
                                     }
 
 
-                                    case DisplayTypes.lunge: {//5
+
+                                    case GestureTypes.lunge: {//5
                                             canvas.DrawLungeInfo(_filteredJoints);
                                             break;
                                     }
-                                    case DisplayTypes.frontlift: {//6
+                                    case GestureTypes.frontlift: {//6
                                             canvas.DrawFrontliftInfo(_filteredJoints);
                                             break;
                                     }
-                                    case DisplayTypes.deadlift: {//7
+                                    case GestureTypes.deadlift: {//7
                                             canvas.DrawDeadliftInfo(_filteredJoints);
                                             break;
                                     }
-                                    case DisplayTypes.biceps_curl: {//8
+                                    case GestureTypes.biceps_curl: {//8
                                             canvas.DrawBiceps_curlInfo(_filteredJoints);
                                             break;
                                     }
 
-                                    case DisplayTypes.showAllSide: {//100
+                                    case GestureTypes.showAllSide: {//100
                                             /*
                                                 canvas.DrawDegreeDownerBody(_filteredJoints);
                                                 canvas.DrawIsStraightAnkle(_filteredJoints);
@@ -482,9 +496,11 @@ namespace KinectStreams
              
                 ulong trackingId = body.TrackingId;
 
-                if (trackingId != this.gestureDetector.TrackingId) {
-                    this.gestureDetector.TrackingId = trackingId;
-                    this.gestureDetector.IsPaused = trackingId == 0;
+                for (int i = 0; i < 8; i++) {
+                    if (trackingId != this.gestureDetector[i].TrackingId) {
+                        this.gestureDetector[i].TrackingId = trackingId;
+                        this.gestureDetector[i].IsPaused = trackingId == 0;
+                    }
                 }
             }
         }

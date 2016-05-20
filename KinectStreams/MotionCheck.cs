@@ -188,17 +188,17 @@ namespace KinectStreams {
 
         #region show-fields
 
-        private int showInfoSidelift = DisplayTypes.sidelift;
-        private int showInfoSquat = DisplayTypes.squat;
-        private int showInfoShoulderpress = DisplayTypes.shoulderpress;
-        private int showInfoRow = DisplayTypes.row;
+        private int showInfoSidelift = GestureTypes.sidelift;
+        private int showInfoSquat = GestureTypes.squat;
+        private int showInfoShoulderpress = GestureTypes.shoulderpress;
+        private int showInfoRow = GestureTypes.row;
 
-        private int showInfoLunge = DisplayTypes.lunge;
-        private int showInfoFrontlift = DisplayTypes.frontlift;
-        private int showInfoDeadlift = DisplayTypes.deadlift;
-        private int showInfoBiceps_curl = DisplayTypes.biceps_curl;
+        private int showInfoLunge = GestureTypes.lunge;
+        private int showInfoFrontlift = GestureTypes.frontlift;
+        private int showInfoDeadlift = GestureTypes.deadlift;
+        private int showInfoBiceps_curl = GestureTypes.biceps_curl;
 
-        private int showInfoSomethingWrong = DisplayTypes.showDefault;
+        private int showInfoSomethingWrong = GestureTypes.showDefault;
 
         #endregion
 

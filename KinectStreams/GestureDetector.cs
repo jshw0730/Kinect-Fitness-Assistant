@@ -81,7 +81,7 @@ namespace KinectStreams {
         /// </summary>
         /// <param name="kinectSensor">Active sensor to initialize the VisualGestureBuilderFrameSource object with</param>
         /// <param name="gestureResultView">GestureResultView object to store gesture results of a single body to</param>
-        public GestureDetector(KinectSensor kinectSensor,  GestureResultView gestureResultView) {
+        public GestureDetector(KinectSensor kinectSensor,  GestureResultView gestureResultView, int gType ) {
             if ( kinectSensor == null ) {
                 throw new ArgumentNullException("kinectSensor");
             }
@@ -104,75 +104,95 @@ namespace KinectStreams {
 
 
             #region load the gesture from the gesture database
-            
-            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_sidelift) ) {
-                foreach ( Gesture gesture in database.AvailableGestures ) {
-                    if ( gesture.Name.Equals(this.sideliftGestureName) )   { this.vgbFrameSource.AddGesture(gesture); }
-                    if ( gesture.Name.Equals(this.sideliftGestureName_A) ) { this.vgbFrameSource.AddGesture(gesture); }
-                    if ( gesture.Name.Equals(this.sideliftGestureName_B) ) { this.vgbFrameSource.AddGesture(gesture); }
-                }
-            }
-            
 
-            using ( VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_squat) ) {
-                foreach ( Gesture gesture in database.AvailableGestures ) {
-                    if ( gesture.Name.Equals(this.squatGestureName) )   { this.vgbFrameSource.AddGesture(gesture); }
-                    if ( gesture.Name.Equals(this.squatGestureName_A) ) { this.vgbFrameSource.AddGesture(gesture); }
-                    if ( gesture.Name.Equals(this.squatGestureName_B) ) { this.vgbFrameSource.AddGesture(gesture); }
+            if (gType == GestureTypes.sidelift) {
+
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_sidelift)) {
+                    foreach (Gesture gesture in database.AvailableGestures) {
+                        if (gesture.Name.Equals(this.sideliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.sideliftGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.sideliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                    }
                 }
             }
 
-            /*
-            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_shoulderpress)) {
-                foreach (Gesture gesture in database.AvailableGestures) {
-                    if (gesture.Name.Equals(this.shoulderpressGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.shoulderpressGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.shoulderpressGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
-                }
-            }
-            
-            
-            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_row)) {
-                foreach (Gesture gesture in database.AvailableGestures) {
-                    if (gesture.Name.Equals(this.rowGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.rowGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.rowGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
-                }
-            }
-            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_lunge)) {
-                foreach (Gesture gesture in database.AvailableGestures) {
-                    if (gesture.Name.Equals(this.lungeGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.lungeGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.lungeGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
-                }
-            }
-            
-            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_frontlift)) {
-                foreach (Gesture gesture in database.AvailableGestures) {
-                    if (gesture.Name.Equals(this.frontliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.frontliftGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.frontliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
-                }
-            }
-             
+            else if (gType == GestureTypes.squat) {
 
-            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_deadlift)) {
-                foreach (Gesture gesture in database.AvailableGestures) {
-                    if (gesture.Name.Equals(this.deadliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.deadliftGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.deadliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_squat)) {
+                    foreach (Gesture gesture in database.AvailableGestures) {
+                        if (gesture.Name.Equals(this.squatGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.squatGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.squatGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                    }
                 }
             }
-            
-            using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_biceps_curl)) {
-                foreach (Gesture gesture in database.AvailableGestures) {
-                    if (gesture.Name.Equals(this.biceps_curlGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.biceps_curlGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
-                    if (gesture.Name.Equals(this.biceps_curlGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
-                }
-            }
-            */
 
+            else if (gType == GestureTypes.shoulderpress) {
+
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_shoulderpress)) {
+                    foreach (Gesture gesture in database.AvailableGestures) {
+                        if (gesture.Name.Equals(this.shoulderpressGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.shoulderpressGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.shoulderpressGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                    }
+                }
+            }
+
+            else if (gType == GestureTypes.row) {
+
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_row)) {
+                    foreach (Gesture gesture in database.AvailableGestures) {
+                        if (gesture.Name.Equals(this.rowGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.rowGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.rowGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                    }
+                }
+            }
+
+            else if (gType == GestureTypes.lunge) {
+
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_lunge)) {
+                    foreach (Gesture gesture in database.AvailableGestures) {
+                        if (gesture.Name.Equals(this.lungeGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.lungeGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.lungeGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                    }
+                }
+            }
+
+            else if (gType == GestureTypes.frontlift) {
+
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_frontlift)) {
+                    foreach (Gesture gesture in database.AvailableGestures) {
+                        if (gesture.Name.Equals(this.frontliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.frontliftGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.frontliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                    }
+                }
+            }
+
+            else if (gType == GestureTypes.deadlift) {
+
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_deadlift)) {
+                    foreach (Gesture gesture in database.AvailableGestures) {
+                        if (gesture.Name.Equals(this.deadliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.deadliftGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.deadliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                    }
+                }
+            }
+
+            else if (gType == GestureTypes.biceps_curl) {
+
+                using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_biceps_curl)) {
+                    foreach (Gesture gesture in database.AvailableGestures) {
+                        if (gesture.Name.Equals(this.biceps_curlGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.biceps_curlGestureName_A)) { this.vgbFrameSource.AddGesture(gesture); }
+                        if (gesture.Name.Equals(this.biceps_curlGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
+                    }
+                }
+            }         
+                        
             
 
             #endregion

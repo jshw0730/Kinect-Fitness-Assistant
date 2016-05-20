@@ -77,7 +77,7 @@ namespace KinectStreams
                 return this.bodyIndex;
             }
 
-            private set
+             set
             {
                 if (this.bodyIndex != value)
                 {
@@ -97,7 +97,7 @@ namespace KinectStreams
                 return this.isTracked;
             }
 
-            private set
+             set
             {
                 if (this.IsTracked != value)
                 {
@@ -117,7 +117,7 @@ namespace KinectStreams
                 return this.detected;
             }
 
-            private set
+             set
             {
                 if (this.detected != value)
                 {
@@ -137,7 +137,7 @@ namespace KinectStreams
                 return this.confidence;
             }
 
-            private set
+             set
             {
                 if (this.confidence != value)
                 {
@@ -152,7 +152,7 @@ namespace KinectStreams
                 return this.gestureNumber;
             }
 
-            private set {
+             set {
                 if ( this.gestureNumber != value ) {
                     this.gestureNumber = value;
                     this.NotifyPropertyChanged();
@@ -165,7 +165,7 @@ namespace KinectStreams
                 return this.gestureKind;
             }
 
-            private set {
+             set {
               if ( this.gestureKind != value ) {
                     this.gestureKind = value;
                     this.NotifyPropertyChanged();
@@ -175,12 +175,6 @@ namespace KinectStreams
 
 
 
-        /// <summary>
-        /// Updates the values associated with the discrete gesture detection result
-        /// </summary>
-        /// <param name="isBodyTrackingIdValid">True, if the body associated with the GestureResultView object is still being tracked</param>
-        /// <param name="isGestureDetected">True, if the discrete gesture is currently detected for the associated body</param>
-        /// <param name="detectionConfidence">Confidence value for detection of the discrete gesture</param>
         public void UpdateGestureResult(bool isBodyTrackingIdValid, bool isGestureDetected, float detectionConfidence, int gNumber, string gKind)
         {
             this.IsTracked = isBodyTrackingIdValid;
@@ -208,10 +202,7 @@ namespace KinectStreams
             }
         }
 
-        /// <summary>
-        /// Notifies UI that a property has changed
-        /// </summary>
-        /// <param name="propertyName">Name of property that has changed</param> 
+
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (this.PropertyChanged != null)
