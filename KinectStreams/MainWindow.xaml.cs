@@ -56,6 +56,14 @@ namespace KinectStreams
     public partial class MainWindow : Window
     {
 
+        #region education mode fields
+
+        //public 
+
+
+        #endregion
+
+
         #region gesture_fields
 
         //private List<GestureDetector> gestureDetectorList = null;
