@@ -122,6 +122,7 @@ namespace KinectStreams {
                 }
             }
 
+            /*
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_shoulderpress)) {
                 foreach (Gesture gesture in database.AvailableGestures) {
                     if (gesture.Name.Equals(this.shoulderpressGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
@@ -146,7 +147,6 @@ namespace KinectStreams {
                 }
             }
             
-            /*
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_frontlift)) {
                 foreach (Gesture gesture in database.AvailableGestures) {
                     if (gesture.Name.Equals(this.frontliftGestureName)) { this.vgbFrameSource.AddGesture(gesture); }
@@ -154,7 +154,7 @@ namespace KinectStreams {
                     if (gesture.Name.Equals(this.frontliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
-             */
+             
 
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_deadlift)) {
                 foreach (Gesture gesture in database.AvailableGestures) {
@@ -163,7 +163,7 @@ namespace KinectStreams {
                     if (gesture.Name.Equals(this.deadliftGestureName_B)) { this.vgbFrameSource.AddGesture(gesture); }
                 }
             }
-            /*
+            
             using (VisualGestureBuilderDatabase database = new VisualGestureBuilderDatabase(this.gestureDatabase_biceps_curl)) {
                 foreach (Gesture gesture in database.AvailableGestures) {
                     if (gesture.Name.Equals(this.biceps_curlGestureName)) { this.vgbFrameSource.AddGesture(gesture); }

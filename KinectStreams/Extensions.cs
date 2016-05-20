@@ -14,6 +14,8 @@ namespace KinectStreams
     {
         #region Camera
 
+
+
         // RGB camera 
         public static ImageSource ToBitmap(this ColorFrame frame) {
             int width = frame.FrameDescription.Width;
@@ -101,23 +103,6 @@ namespace KinectStreams
         #region Body
 
 
-        /*
-        public static Joint ScaleTo(this Joint joint, double width, double height, float skeletonMaxX, float skeletonMaxY) {
-            joint.Position = new CameraSpacePoint {
-                X = Scale(width, skeletonMaxX, joint.Position.X),
-                Y = Scale(height, skeletonMaxY, -joint.Position.Y),
-                Z = joint.Position.Z
-            };
-
-            return joint;
-        }
-
-        public static Joint ScaleTo(this Joint joint, double width, double height) {
-            return ScaleTo(joint, width, height, 1.0f, 1.0f);
-        }
-        */
-
-
         public static CameraSpacePoint ScaleTo(this CameraSpacePoint joint, double width, double height, float skeletonMaxX, float skeletonMaxY)
         {
 
@@ -155,12 +140,164 @@ namespace KinectStreams
 
 
 
-        public static void DrawSkeleton(this Canvas canvas, CameraSpacePoint[] filteredJoints) {//, Body body) {
-            //if (body == null) return;
+        public static void DrawSkeleton(this Canvas canvas, CameraSpacePoint[] filteredJoints, bool isViewer =false) {
+            if (filteredJoints == null) return;
+            if (isViewer) {
 
-            for (JointType jt = JointType.SpineBase; jt <= JointType.ThumbRight; jt++)   {
+                canvas.DrawLine(filteredJoints[(int)JointType.Head], filteredJoints[(int)JointType.Neck], true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineShoulder], filteredJoints[(int)JointType.Neck],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineShoulder], filteredJoints[(int)JointType.ShoulderLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineShoulder], filteredJoints[(int)JointType.ShoulderRight],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineShoulder], filteredJoints[(int)JointType.SpineMid],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.ShoulderLeft], filteredJoints[(int)JointType.ElbowLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.ShoulderRight], filteredJoints[(int)JointType.ElbowRight],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.ElbowLeft], filteredJoints[(int)JointType.WristLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.ElbowRight], filteredJoints[(int)JointType.WristRight],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.WristLeft], filteredJoints[(int)JointType.HandLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.WristRight], filteredJoints[(int)JointType.HandRight],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.HandLeft], filteredJoints[(int)JointType.HandTipLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.HandRight], filteredJoints[(int)JointType.HandTipRight],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.HandLeft], filteredJoints[(int)JointType.ThumbLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.HandRight], filteredJoints[(int)JointType.ThumbRight],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineMid], filteredJoints[(int)JointType.SpineBase], true);
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineBase], filteredJoints[(int)JointType.HipLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineBase], filteredJoints[(int)JointType.HipRight],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.HipLeft], filteredJoints[(int)JointType.KneeLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.HipRight], filteredJoints[(int)JointType.KneeRight],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.KneeLeft], filteredJoints[(int)JointType.AnkleLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.KneeRight], filteredJoints[(int)JointType.AnkleRight],  true);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.AnkleLeft], filteredJoints[(int)JointType.FootLeft],  true);
+                canvas.DrawLine(filteredJoints[(int)JointType.AnkleRight], filteredJoints[(int)JointType.FootRight],  true);
+
+                for (JointType jt = JointType.SpineBase; jt <= JointType.ThumbRight; jt++) {
+                    if (jt == JointType.HandLeft || jt == JointType.HandRight || jt == JointType.HandTipLeft || jt == JointType.HandTipRight) {
+                        canvas.DrawPoint(filteredJoints[(int)jt], 5, Colors.White, true);
+                    }
+                    else {
+                        canvas.DrawPoint(filteredJoints[(int)jt], 5, Colors.White, true);
+                    }
+                }
+            }
+
+            else {
+
+                canvas.DrawLine(filteredJoints[(int)JointType.Head], filteredJoints[(int)JointType.Neck]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineShoulder], filteredJoints[(int)JointType.Neck]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineShoulder], filteredJoints[(int)JointType.ShoulderLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineShoulder], filteredJoints[(int)JointType.ShoulderRight]);
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineShoulder], filteredJoints[(int)JointType.SpineMid]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.ShoulderLeft], filteredJoints[(int)JointType.ElbowLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.ShoulderRight], filteredJoints[(int)JointType.ElbowRight]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.ElbowLeft], filteredJoints[(int)JointType.WristLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.ElbowRight], filteredJoints[(int)JointType.WristRight]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.WristLeft], filteredJoints[(int)JointType.HandLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.WristRight], filteredJoints[(int)JointType.HandRight]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.HandLeft], filteredJoints[(int)JointType.HandTipLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.HandRight], filteredJoints[(int)JointType.HandTipRight]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.HandLeft], filteredJoints[(int)JointType.ThumbLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.HandRight], filteredJoints[(int)JointType.ThumbRight]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineMid], filteredJoints[(int)JointType.SpineBase]);
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineBase], filteredJoints[(int)JointType.HipLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.SpineBase], filteredJoints[(int)JointType.HipRight]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.HipLeft], filteredJoints[(int)JointType.KneeLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.HipRight], filteredJoints[(int)JointType.KneeRight]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.KneeLeft], filteredJoints[(int)JointType.AnkleLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.KneeRight], filteredJoints[(int)JointType.AnkleRight]);
+
+                canvas.DrawLine(filteredJoints[(int)JointType.AnkleLeft], filteredJoints[(int)JointType.FootLeft]);
+                canvas.DrawLine(filteredJoints[(int)JointType.AnkleRight], filteredJoints[(int)JointType.FootRight]);
+
+                for (JointType jt = JointType.SpineBase; jt <= JointType.ThumbRight; jt++) {
+                    if (jt == JointType.HandLeft || jt == JointType.HandRight || jt == JointType.HandTipLeft || jt == JointType.HandTipRight) {
+                        canvas.DrawPoint(filteredJoints[(int)jt], 5, Colors.White, true);
+                    }
+                    else {
+                        canvas.DrawPoint(filteredJoints[(int)jt], 5, Colors.White, true);
+                    }
+                }
+            }
+        }
+
+
+
+        public static void DrawPoint(this Canvas canvas, CameraSpacePoint joint, int pSize ,Color pColor ,bool isViewer = false) {
+
+            if (joint == null) return;
+
+            if (isViewer) {
+                joint = joint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
+            }
+
+            
+
+            Ellipse ellipse = new Ellipse {
+                Width = pSize,
+                Height = pSize,
+                Fill = new SolidColorBrush(pColor)
+            };
+
+            Canvas.SetLeft(ellipse, joint.X - ellipse.Width / 2);
+            Canvas.SetTop(ellipse, joint.Y - ellipse.Height / 2);
+
+
+            canvas.Children.Add(ellipse);
+        }
+
+        public static void DrawLine(this Canvas canvas, CameraSpacePoint first, CameraSpacePoint second , bool isViewer = false) {
+
+            if (first == null || second == null) return;
+
+            if (isViewer) {
+                first = first.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
+                second = second.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
+            }
+            Line line = new Line {
+                X1 = first.X,
+                Y1 = first.Y,
+                X2 = second.X,
+                Y2 = second.Y,
+                StrokeThickness = 10,
+                Stroke = new SolidColorBrush(Colors.Red)
+            };
+
+            canvas.Children.Add(line);
+        }
+
+
+
+        #endregion
+
+        /*
+        #region colorSpcaePoints
+
+
+        public static void DrawSkeleton(this Canvas canvas, ColorSpacePoint[] filteredJoints) {
+            if (filteredJoints == null) return;
+
+            for (JointType jt = JointType.SpineBase; jt <= JointType.ThumbRight; jt++) {
                 //if (filteredJoints[(int)jt].X != 0.0f || filteredJoints[(int)jt].Y != 0.0f || filteredJoints[(int)jt].Z != 0.0f)  {
-                    canvas.DrawPoint(filteredJoints[(int)jt]);
+                canvas.DrawPoint(filteredJoints[(int)jt]);
                 //}
             }
 
@@ -204,11 +341,13 @@ namespace KinectStreams
 
 
 
-        public static void DrawPoint(this Canvas canvas, CameraSpacePoint joint ) {//Joint joint) {
+        public static void DrawPoint(this Canvas canvas, ColorSpacePoint joint) {
 
-            //if (joint.TrackingState == TrackingState.NotTracked) return;
+            if (joint == null) return;
 
-            joint = joint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
+            //joint = joint.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
+
+
 
             Ellipse ellipse = new Ellipse {
                 Width = 20,
@@ -223,9 +362,9 @@ namespace KinectStreams
             canvas.Children.Add(ellipse);
         }
 
-        public static void DrawLine(this Canvas canvas, CameraSpacePoint first, CameraSpacePoint second) {
+        public static void DrawLine(this Canvas canvas, ColorSpacePoint first, ColorSpacePoint second) {
 
-            //if (first.TrackingState == TrackingState.NotTracked || second.TrackingState == TrackingState.NotTracked) return;
+            if (first == null || second == null) return;
 
             first = first.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
             second = second.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
@@ -235,15 +374,14 @@ namespace KinectStreams
                 Y1 = first.Y,
                 X2 = second.X,
                 Y2 = second.Y,
-                StrokeThickness = 8,
-                Stroke = new SolidColorBrush(Colors.LightBlue)
+                StrokeThickness = 20,
+                Stroke = new SolidColorBrush(Colors.Red)
             };
 
             canvas.Children.Add(line);
         }
-
-
-
         #endregion
+
+        */
     }
 }

@@ -83,7 +83,7 @@ namespace KinectStreams
         KinectJointFilter _filter = new KinectJointFilter();    //노이즈 잡는 필터
         CameraSpacePoint[] _filteredJoints;                     //필터에 들어갔다온 joint
 
-
+       
         bool _displayBody = true;//false;   //body 표시
         bool _displayCoord = false;         //좌표 표시
 
@@ -191,6 +191,7 @@ namespace KinectStreams
                 
                 if (frame != null) {
                     canvas.Children.Clear();
+                    skeletonViwer.Children.Clear();
 
                     int bodycounts = frame.BodyFrameSource.BodyCount;
                     Body[] bodiesArray = new Body[bodycounts];
@@ -226,20 +227,50 @@ namespace KinectStreams
 
                             // Draw skeleton.
                             if (_displayBody) {
+                                //copy joints to check motion
+                                motionChecker.setJoints(_filteredJoints);
 
+                                //convert body data to be smoothed
                                 _filter.UpdateFilter(body);
                                 _filteredJoints = _filter.GetFilteredJoints();
 
-                                motionChecker.setJoints(_filteredJoints);
+                                if (body.IsTracked) { 
+                                    skeletonViwer.DrawSkeleton( _filteredJoints, true);
+                                }
 
-                                canvas.DrawSkeleton(_filteredJoints);//, body);
-
-                             
+                                //display xyz coordinate
                                 if (_displayCoord) {
                                     canvas.DrawSkeletonCoord(_filteredJoints);
                                 }
 
-                                
+                                for (JointType jt = JointType.SpineBase; jt <= JointType.ThumbRight; jt++) {
+
+                                    // 3D space point
+                                    CameraSpacePoint jointPosition = _filteredJoints[(int)jt];
+
+                                    // 2D space point
+                                    Point point = new Point();
+
+                                    if (_mode == Mode.Color) {
+                                        ColorSpacePoint colorPoint = _sensor.CoordinateMapper.MapCameraPointToColorSpace(jointPosition);
+
+                                        point.X = double.IsInfinity(colorPoint.X) ? 0 : colorPoint.X;
+                                        point.Y = double.IsInfinity(colorPoint.Y) ? 0 : colorPoint.Y;
+                                    }
+                                    else if (_mode == Mode.Depth || _mode == Mode.Infrared) {// Change the Image and Canvas dimensions to 512x424 {
+                                        DepthSpacePoint depthPoint = _sensor.CoordinateMapper.MapCameraPointToDepthSpace(jointPosition);
+
+                                        point.X = double.IsInfinity(depthPoint.X) ? 0 : depthPoint.X;
+                                        point.Y = double.IsInfinity(depthPoint.Y) ? 0 : depthPoint.Y;
+                                    }
+
+
+                                    _filteredJoints[(int)jt].X = Convert.ToSingle(point.X);
+                                    _filteredJoints[(int)jt].Y = Convert.ToSingle(point.Y);
+                                }
+                            
+                                //canvas.DrawSkeleton(_filteredJoints);
+
 
                                 //have been changed
                                 switch (_displayDegree) {
@@ -284,7 +315,6 @@ namespace KinectStreams
                                             canvas.DrawBiceps_curlInfo(_filteredJoints);
                                             break;
                                     }
-
 
                                     case DisplayTypes.showAllSide: {//100
                                             /*

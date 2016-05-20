@@ -143,8 +143,8 @@ namespace KinectStreams
 
             double angle = inpAngle;    //inp angle
             if (angle > inAngle2 && maxAngle < 180) {       //inAngle2안정권2~maxAngle최대각도
-                gColor = (byte)((angle / inAngle2) * 255);   //0~80, 0~1
-                rColor = (byte)((1- angle / inAngle2) * 255);         //0~80, 1~0
+                gColor = (byte)((inAngle2 / angle) * 255);   //0~80, 0~1
+                rColor = (byte)((1- inAngle2 / angle) * 255);         //0~80, 1~0
             }
             else if (angle > minAngle && angle < inAngle1) { //minAngle최소각도 ~ inAnlge1안정권1
                 gColor = (byte)(angle / inAngle1 * 255);          //0~80, 0~1
@@ -197,19 +197,22 @@ namespace KinectStreams
 
 
             // 2 겨드랑이
-            DrawColoredAngle(canvas,fJoints[(int)JointType.ShoulderLeft],angleCalc.dgLeftShoulder(fJoints),0,80,100,180);
-            DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderRight], angleCalc.dgRightShoulder(fJoints), 0, 80, 100, 180);
+            DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderLeft], angleCalc.dgLeftShoulder(fJoints), 0, 80, 120, 180);
+            DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderRight], angleCalc.dgRightShoulder(fJoints), 0, 80, 120, 180);
 
             // 3 허리가 곧은가
+            /*
             if (angleCalc.isStraightBack(fJoints)) {
                 DrawString(canvas, fJoints[(int)JointType.SpineMid], "허리펴라", Colors.Pink);
             }
-
+            */
+            
             // 4 다리사이 거리
             if (angleCalc.dsFoot(fJoints) > angleCalc.dsShoulder(fJoints)) {                
                 DrawString(canvas, angleCalc.MiddleJoint(fJoints[(int)JointType.FootLeft], fJoints[(int)JointType.FootRight]), "발좁혀라", Colors.Yellow);
             }
-
+            
+            
             // 5 목이 곧은가
             if (angleCalc.isSraightNeck(fJoints)) {
                 DrawString(canvas, fJoints[(int)JointType.Neck], "목펴라", Colors.Red);
