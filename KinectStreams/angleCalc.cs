@@ -128,6 +128,24 @@ namespace KinectStreams
             return CalcDegreeA(filteredJoints[(int)JointType.KneeRight], filteredJoints[(int)JointType.HipRight], filteredJoints[(int)JointType.AnkleRight]);
         }
 
+        // add
+        public static double dgHip(CameraSpacePoint[] filteredjoints) {
+            CameraSpacePoint midKnee = angleCalc.MiddleJoint(filteredjoints[(int)JointType.KneeLeft], filteredjoints[(int)JointType.KneeRight]);
+            CameraSpacePoint midHip = angleCalc.MiddleJoint(filteredjoints[(int)JointType.HipLeft], filteredjoints[(int)JointType.HipRight]);
+            CameraSpacePoint midShoulder = angleCalc.MiddleJoint(filteredjoints[(int)JointType.ShoulderLeft], filteredjoints[(int)JointType.ShoulderRight]);
+            return CalcDegreeA(midHip, midKnee, midShoulder);
+        }
+
+
+        //사용 불가능.
+        public static double dgSpine(CameraSpacePoint[] filteredjoints) {
+            //CameraSpacePoint midKnee = angleCalc.MiddleJoint(filteredjoints[(int)JointType.KneeLeft], filteredjoints[(int)JointType.KneeRight]);
+            CameraSpacePoint midHip = angleCalc.MiddleJoint(filteredjoints[(int)JointType.HipLeft], filteredjoints[(int)JointType.HipRight]);
+            CameraSpacePoint midShoulder = angleCalc.MiddleJoint(filteredjoints[(int)JointType.ShoulderLeft], filteredjoints[(int)JointType.ShoulderRight]);
+            return CalcDegreeA(filteredjoints[(int)JointType.SpineMid], midHip, midShoulder);
+        }
+
+
         //7 distance of foot
         public static double dsFoot(CameraSpacePoint[] filteredJoints) {
             return CalcDistance(filteredJoints[(int)JointType.AnkleLeft],filteredJoints[(int)JointType.AnkleRight]);

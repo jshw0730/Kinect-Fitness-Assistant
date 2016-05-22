@@ -56,6 +56,7 @@ namespace KinectStreams
                 Height = 60,
                 Foreground = new SolidColorBrush(Colors.Green),
                 Text = _jointPositionY.ToString()
+                
             };
 
             TextBlock textBlockZ = new TextBlock {
@@ -91,14 +92,10 @@ namespace KinectStreams
         //first parameter for position, second parameter for value(double)
         public static void DrawString(this Canvas canvas, CameraSpacePoint displayPosJointA/*drawingpart*/, string string2draw, Color strColor) {
 
-            //CameraSpacePoint joint;
-
-            //joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
-
             TextBlock textBlock = new TextBlock {
 
                 FontSize = 40,
-                Width = 600,
+                Width = 200,
                 Height = 100,
                 Foreground = new SolidColorBrush(strColor),
                 FontWeight = FontWeights.UltraBold,
@@ -115,9 +112,6 @@ namespace KinectStreams
         public static void DrawString(this Canvas canvas, CameraSpacePoint displayPosJointA/*drawingpart*/, double string2draw, Color strColor) {
 
             int String2draw = (int)string2draw;
-            //CameraSpacePoint joint;
-
-            //joint = displayPosJointA.ScaleTo(canvas.ActualWidth, canvas.ActualHeight);
 
             TextBlock textBlock = new TextBlock {
                 FontSize = 80,
@@ -137,19 +131,21 @@ namespace KinectStreams
 
 
         public static void DrawColoredAngle(Canvas canvas, CameraSpacePoint disPosJoint, 
-            double inpAngle, double minAngle, double inAngle1, double inAngle2, double maxAngle  ) {
+                                            double inpAngle, double minAngle, double inAngle1, double inAngle2, double maxAngle  ) {
             byte gColor = 0;
             byte rColor = 0;
-
             double angle = inpAngle;    //inp angle
-            if (angle > inAngle2 && maxAngle < 180) {       //inAngle2안정권2~maxAngle최대각도
-                gColor = (byte)((inAngle2 / angle) * 255);   //0~80, 0~1
-                rColor = (byte)((1- inAngle2 / angle) * 255);         //0~80, 1~0
-            }
-            else if (angle > minAngle && angle < inAngle1) { //minAngle최소각도 ~ inAnlge1안정권1
+
+            if (angle > minAngle && angle < inAngle1) { //minAngle최소각도 ~ inAnlge1안정권1
                 gColor = (byte)(angle / inAngle1 * 255);          //0~80, 0~1
                 rColor = (byte)((1 - angle / inAngle1) * 255);    //0~80, 1~0
             }
+                        
+            else if (angle > inAngle2 &&  angle < maxAngle ) {       //inAngle2안정권2~maxAngle최대각도
+                gColor = (byte)((inAngle2 / angle) * 255);   //0~80, 0~1
+                rColor = (byte)((1- inAngle2 / angle) * 255);         //0~80, 1~0
+            }
+    
             else if (angle >= inAngle1 && angle <= inAngle2) { //inAngle1안정권1 ~ inAngle2안정권2
                 rColor = (byte)0;
                 gColor = (byte)255;
@@ -236,13 +232,17 @@ namespace KinectStreams
             DrawColoredAngle(canvas, fJoints[(int)JointType.KneeLeft], angleCalc.dgLeftKnee(fJoints), 0, 10, 120, 180);
             DrawColoredAngle(canvas, fJoints[(int)JointType.KneeRight], angleCalc.dgRightKnee(fJoints), 0, 10, 120, 180);
             
-            // 발사이 거리
-                   if (angleCalc.dsFoot(fJoints) < angleCalc.dsShoulder(fJoints)) {
-                       DrawString(canvas, angleCalc.MiddleJoint(fJoints[(int)JointType.FootLeft], fJoints[(int)JointType.FootRight]), "더 벌려", Colors.Yellow);
+            // 발사이 어깨넓이
+            if (angleCalc.dsFoot(fJoints) < angleCalc.dsShoulder(fJoints)) {
+                 DrawString(canvas, angleCalc.MiddleJoint(fJoints[(int)JointType.FootLeft], fJoints[(int)JointType.FootRight]), "더 벌려", Colors.Yellow);
             }
-            
+
             // 엉덩이
-           // DrawColoredAngle(canvas, fJoints)
+            DrawColoredAngle(canvas, fJoints[(int)JointType.SpineBase], angleCalc.dgHip(fJoints), 0, 20, 50, 180);
+
+
+            //척추
+            DrawColoredAngle(canvas, fJoints[(int)JointType.SpineMid], angleCalc.dgSpine(fJoints), 0, 20, 50, 180);
 
         }
 
@@ -260,38 +260,70 @@ namespace KinectStreams
             //shoulder
             DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderLeft],angleCalc.dgLeftShoulder(fJoints),0,100,180,200);
             DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderRight], angleCalc.dgRightShoulder(fJoints), 0, 100, 180, 200);
-            
-                
+
+            // 발사이 어깨넓이
+            if ( angleCalc.dsFoot(fJoints) < angleCalc.dsShoulder(fJoints) ) {
+                DrawString(canvas, angleCalc.MiddleJoint(fJoints[(int)JointType.FootLeft], fJoints[(int)JointType.FootRight]), "더 벌려", Colors.Yellow);
+            }
+
         }
 
         // 4. row
         public static void DrawRowInfo(this Canvas canvas, CameraSpacePoint[] fJoints) {
             /*
              * 
-             */ 
+             */
+            //elbow
+            DrawColoredAngle(canvas, fJoints[(int)JointType.ElbowLeft], angleCalc.dgLeftElbow(fJoints), 0, 150, 180, 190);
+            DrawColoredAngle(canvas, fJoints[(int)JointType.ElbowRight], angleCalc.dgRightElbow(fJoints), 0, 150, 180, 190);
 
+            //shoulder
+            DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderLeft], angleCalc.dgLeftShoulder(fJoints), 0, 100, 180, 200);
+            DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderRight], angleCalc.dgRightShoulder(fJoints), 0, 100, 180, 200);
+
+            // 발사이 어깨넓이
+            if ( angleCalc.dsFoot(fJoints) < angleCalc.dsShoulder(fJoints) ) {
+                DrawString(canvas, angleCalc.MiddleJoint(fJoints[(int)JointType.FootLeft], fJoints[(int)JointType.FootRight]), "더 벌려", Colors.Yellow);
+            }
         }
 
         // 5. lunge
         public static void DrawLungeInfo(this Canvas canvas, CameraSpacePoint[] fJoints) {
             /*
              * 
-             */ 
+             */
 
+            //양 무릎
+            DrawColoredAngle(canvas, fJoints[(int)JointType.KneeLeft], angleCalc.dgLeftKnee(fJoints), 0, 80, 100, 180);
+            DrawColoredAngle(canvas, fJoints[(int)JointType.KneeRight], angleCalc.dgRightKnee(fJoints), 0, 80, 100, 180);
         }
 
         // 6. frontlift
         public static void DrawFrontliftInfo(this Canvas canvas, CameraSpacePoint[] fJoints) {
             /*
-             * * elbow 160~180
-             * * shoulder 0~120
+             * * elbow 160~180 - 외에 경고
+             * * shoulder 0~120 - 항시
              * * 목, 허리
              */
-            DrawColoredAngle(canvas, fJoints[(int)JointType.ElbowLeft], angleCalc.dgLeftElbow(fJoints), 90, 180, 180, 200);
-            DrawColoredAngle(canvas, fJoints[(int)JointType.ElbowRight], angleCalc.dgRightElbow(fJoints), 90, 180, 180, 200);
+            if ( angleCalc.dgLeftElbow(fJoints) < 160.0f ) {
+                DrawString(canvas, fJoints[(int)JointType.ElbowLeft], "팔꿈치펴라", Colors.Orange);
+            }
+            if ( angleCalc.dgRightElbow(fJoints) < 160.0f ) {
+                DrawString(canvas, fJoints[(int)JointType.ElbowRight], "팔꿈치펴라", Colors.Orange);
+            }
 
+            //DrawColoredAngle(canvas, fJoints[(int)JointType.ElbowLeft], angleCalc.dgLeftElbow(fJoints), 90, 180, 180, 200);
+            //DrawColoredAngle(canvas, fJoints[(int)JointType.ElbowRight], angleCalc.dgRightElbow(fJoints), 90, 180, 180, 200);
+
+            //숄더
             DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderLeft], angleCalc.dgLeftShoulder(fJoints), 0, 100, 120, 180);
             DrawColoredAngle(canvas, fJoints[(int)JointType.ShoulderRight], angleCalc.dgRightShoulder(fJoints), 0, 100, 120, 180);
+
+            // 발사이 어깨넓이
+            if ( angleCalc.dsFoot(fJoints) < angleCalc.dsShoulder(fJoints) ) {
+                DrawString(canvas, angleCalc.MiddleJoint(fJoints[(int)JointType.FootLeft], fJoints[(int)JointType.FootRight]), "더 벌려", Colors.Yellow);
+            }
+
         }
 
         // 7. deadlift
@@ -299,6 +331,13 @@ namespace KinectStreams
             /*
              * 
              */
+            // 발사이 어깨넓이
+            if ( angleCalc.dsFoot(fJoints) < angleCalc.dsShoulder(fJoints) ) {
+                DrawString(canvas, angleCalc.MiddleJoint(fJoints[(int)JointType.FootLeft], fJoints[(int)JointType.FootRight]), "더 벌려", Colors.Yellow);
+            }
+
+            // 엉덩이
+            DrawColoredAngle(canvas, fJoints[(int)JointType.SpineBase], angleCalc.dgHip(fJoints), 0, 70, 90, 180);
 
         }
 
@@ -307,7 +346,9 @@ namespace KinectStreams
             /*
              * 
              */
-
+            //elbow
+            DrawColoredAngle(canvas, fJoints[(int)JointType.ElbowLeft], angleCalc.dgLeftElbow(fJoints), 0, 20, 30, 190);
+            DrawColoredAngle(canvas, fJoints[(int)JointType.ElbowRight], angleCalc.dgRightElbow(fJoints), 0, 20, 30, 190);
         }
 
 

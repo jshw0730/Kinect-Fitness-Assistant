@@ -82,7 +82,7 @@ namespace KinectStreams
             Infrared
         }
 
-        Mode _mode = Mode.Depth;    //시작모드 [color,depth,infrared]
+        Mode _mode = Mode.Color;    //시작모드 [color,depth,infrared]
 
         KinectSensor _sensor;   //센서
         MultiSourceFrameReader _reader; //프레임리더 
@@ -240,8 +240,6 @@ namespace KinectStreams
                         // Do stuff with known active body.
                     }
 
-
-                    //foreach (Body body in _bodies) {
                     if (body != null) {
                         if (body.IsTracked) {
 

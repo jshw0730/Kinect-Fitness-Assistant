@@ -55,7 +55,7 @@
         	FontSize="70"
         	Foreground="Black"
         	Background="Yellow"
-        	Opacity="1.0" Margin="0,0,0,53" Height="94" VerticalAlignment="Bottom"/>
+        	Opacity="1.0" Margin="0,0,0,53.4" Height="94" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="421"/>
         <TextBlock x:Name="motioncheckerTF"
         	Text=""
         	FontSize="90"
